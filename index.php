@@ -27,14 +27,24 @@
 				</div>
 				
 				<div class="main_container">
-					<div class="margin30">
-					</div>
 					
 					<div class="containers container1">
 						<?php
 							error_reporting(E_ALL);
 							require("scripts/posts.php");
 						?>
+					</div>
+					
+					
+					
+					<div class="containers container2">
+						<div class="vertical_line" style="float: left;">
+						</div>
+						<div class="sidebar">
+							<?php
+							require("scripts/sidebar.php");
+						?>
+						</div>
 					</div>
 					
 				</div>

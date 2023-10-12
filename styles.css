@@ -1,3 +1,10 @@
+body
+{
+	font-family: "Open Sans";
+	color: #aaaaaa;
+	font-weight: normal;
+}
+
 .font
 {
 	font-family: "Open Sans";
@@ -22,7 +29,7 @@
 
 .top_container
 {
-	width: 1050px;
+	width: 1060px;
 	height: auto;
 	background-color: #333333;
 }
@@ -47,9 +54,15 @@ h1
 
 h2
 {
-	font-size: 20px;
+	font-size: 22px;
 	font-weight: normal;
 	color: #aaaaaa;
+}
+
+.main_container
+{
+	padding-top: 10px;
+	display: flex;
 }
 
 .horizontal_line
@@ -59,26 +72,96 @@ h2
 	background-color: #404040;
 }
 
-.margin30
+.vertical_line
 {
-	margin-top: 30px;
-	height: auto;
-	width: 100%;
+	height: 100%;
+	width: 1px;
+	background-color: #404040;
 }
 
 .containers
 {
-	width: 620px;
-	padding-right: 30px;
+	
 }
 
 .container1
 {
-	
+	padding-right: 30px;
+	width: 620px;
+	display: flex;
+	flex-wrap: wrap;
+	float: left;
+}
+
+
+
+.container2
+{
+	float: left;
+	width: 325px;
+	padding-top: 20px;
+}
+
+.sidebar
+{
+	padding-left: 30px;
+}
+
+.subtext
+{
+	background-color: #303030;
+	color: #aaaaaa;
 }
 
 .post
 {
 	width: 620px;
 	height: 620px;
+	padding-right: 30px;
+}
+
+a:link
+{
+	text-decoration: none;
+	color: #dd7700;
+	font-weight: normal;
+}
+
+a:visited
+{
+	color: #cc6600;
+}
+
+a:hover
+{
+	color: #cc6600;
+}
+
+.videostags
+{
+	width: 620px;
+	height: auto;
+	padding-bottom: 15px;
+}
+
+.gadgets
+{
+	padding-bottom: 30px;
+}
+
+.gadgets_top_text
+{
+	font: normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+	color: white;
+}
+
+.searchbox
+{
+	width: 225px;
+	margin-right: 2px;
+}
+
+.button_searchbox
+{
+	width: 60px;
 }
