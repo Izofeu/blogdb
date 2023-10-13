@@ -39,4 +39,15 @@
 	echo "<input type='submit' class='button_searchbox'>";
 	echo "</form>";
 	echo "</div>";
+	
+	# Information
+	echo "<div class='information gadgets'>";
+	echo "<h3 class='gadgets_top_text'>Information</h3>";
+	echo "<li><a href='https://mikuboard.blogspot.com/p/about_2.html'>About</a></li>
+		<li><a href='https://mikuboard.blogspot.com/p/comment-rules.html'>Comment rules</a></li>
+		<li><a href='https://mikuboard.blogspot.com/p/contact-details.html'>Contact details</a></li>
+		<!--<li><a rel='nofollow' href='https://mikuboard.blogspot.com/p/disable-ads.html' class='redlink'>Ads removal statement</a></li>-->
+		<li><a href='https://mikuboard.blogspot.com/p/settings.html'>Settings</a></li>
+		</ul>";
+	echo "</div>";
 ?>

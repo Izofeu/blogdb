@@ -7,7 +7,7 @@ if (mysqli_connect_errno())
 {
 	die("Cannot connect to the database.");
 }
-$query = "SELECT * FROM posts ORDER BY id DESC LIMIT 2";
+$query = "SELECT * FROM posts ORDER BY date DESC LIMIT 2 OFFSET 100";
 $res = mysqli_query($db, $query);
 # 0 - id
 # 1 - title
@@ -24,6 +24,8 @@ while ($post = mysqli_fetch_array($res))
 	echo "<video controls name='media' preload='none' class='lazy videostags' data-poster='" . $post[6] . "'>";
 	echo "<source src='" . $post[5] . "' type='video/mp4'>";
 	echo "</video>";
+	echo "<div class='hfiller20px'>";
+	echo "</div>";
 	echo "<div class='horizontal_line'>";
 	echo "</div>";
 	echo "<div class='subtext'>";
