@@ -7,7 +7,26 @@ if (mysqli_connect_errno())
 {
 	die("Cannot connect to the database.");
 }
-$query = "SELECT * FROM posts ORDER BY date DESC LIMIT 2 OFFSET 100";
+$offset = 0;
+$page = 1;
+if(isset($_GET["page"]))
+{
+	if(is_numeric($_GET["page"]))
+	{
+		if($_GET["page"] > 0)
+		{
+			$page = $_GET["page"];
+			$offset = ($_GET["page"] * 20) - 20;
+			if($offset < 0)
+			{
+				$offset = 0;
+			}
+		}
+	}
+}
+
+$postcount = 20;
+$query = "SELECT * FROM posts ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
 $res = mysqli_query($db, $query);
 # 0 - id
 # 1 - title
@@ -35,5 +54,15 @@ while ($post = mysqli_fetch_array($res))
 	echo "</div>";
 }
 
+$query = "SELECT COUNT(id) FROM posts";
+$res = mysqli_query($db, $query);
+$res = mysqli_fetch_array($res);
+$res = $res[0];
+$res = intdiv($res, $postcount) + 1;
+echo "<div class='pagecount'>";
+echo "Page " . $page . " out of " . $res;
+echo "</div>";
+
+mysqli_close($db);
 echo "<script src='lazyload.js'></script>";
 ?>

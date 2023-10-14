@@ -37,7 +37,12 @@ body
 .top_container_margin
 {
 	margin-left: 40px;
-	margin-right: 40px;
+	margin-right: 35px;
+}
+
+.bottom_container_margin
+{
+	height: 30px;
 }
 
 .top_header
@@ -91,6 +96,7 @@ h2
 	display: flex;
 	flex-wrap: wrap;
 	float: left;
+	align-content: flex-start;
 }
 
 
@@ -116,7 +122,7 @@ h2
 .post
 {
 	width: 620px;
-	height: 620px;
+	/*height: 620px;*/
 	padding-right: 30px;
 }
 
@@ -164,4 +170,53 @@ a:hover
 .button_searchbox
 {
 	width: 60px;
+}
+
+.url_list
+{
+	padding-left: 18px;
+	font-size: 14px;
+	line-height: 24px;
+}
+
+.mikulink:link, .mikulink:visited, .mikulink:hover, .mikulink:active
+{
+	color:#1ABC9C;
+}
+
+.lukalink:link, .lukalink:visited, .lukalink:hover, .lukalink:active
+{
+	color:#E91F63;
+}
+
+.rinlink:link, .rinlink:visited, .rinlink:hover, .rinlink:active
+{
+	color:#E67E22;
+}
+
+.meikolink:link, .meikolink:visited, .meikolink:hover, .meikolink:active
+{
+	color:#982D21;
+}
+
+.lenlink:link, .lenlink:visited, .lenlink:hover, .lenlink:active
+{
+	color:#F1C30F;
+}
+
+.kaitolink:link, .kaitolink:visited, .kaitolink:hover, .kaitolink:active
+{
+	color:#206695;
+}
+
+.hakulink:link, .hakulink:visited, .hakulink:hover, .hakulink:active
+{
+	color:#9B5AB6;
+}
+
+.pagecount
+{
+	text-align: center;
+	padding-top: 20px;
+	width: 100%;
 }

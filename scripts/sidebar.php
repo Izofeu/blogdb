@@ -43,11 +43,30 @@
 	# Information
 	echo "<div class='information gadgets'>";
 	echo "<h3 class='gadgets_top_text'>Information</h3>";
-	echo "<li><a href='https://mikuboard.blogspot.com/p/about_2.html'>About</a></li>
+	echo "<ul class='url_list'>
+		<li><a href='https://mikuboard.blogspot.com/p/about_2.html'>About</a></li>
 		<li><a href='https://mikuboard.blogspot.com/p/comment-rules.html'>Comment rules</a></li>
 		<li><a href='https://mikuboard.blogspot.com/p/contact-details.html'>Contact details</a></li>
 		<!--<li><a rel='nofollow' href='https://mikuboard.blogspot.com/p/disable-ads.html' class='redlink'>Ads removal statement</a></li>-->
 		<li><a href='https://mikuboard.blogspot.com/p/settings.html'>Settings</a></li>
 		</ul>";
+	echo "</div>";
+	
+	# Filter by tags
+	echo "<div class='filter_by gadgets'>";
+	echo "<h3 class='gadgets_top_text'>Filter by</h3>";
+	echo "<ul class='url_list'>
+		<li><a class='mikulink' href='https://mikuboard.blogspot.com/search/label/miku'>Miku</a></li>
+		<li><a class='lukalink' href='https://mikuboard.blogspot.com/search/label/luka'>Luka</a></li>
+		<li><a class='lenlink' href='https://mikuboard.blogspot.com/search/label/rin'>Rin</a></li>
+		<li><a class='hakulink' href='https://mikuboard.blogspot.com/search/label/haku'>Haku</a></li>
+		<li><a class='meikolink' href='https://mikuboard.blogspot.com/search/label/meiko'>Meiko</a></li>
+		</ul>";
+	echo "</div>";
+	
+	# Discord embed
+	echo "<div class='discord gadgets'>";
+	echo "<h3 class='gadgets_top_text'>Discord server</h3>";
+	echo "<iframe src='https://discord.com/widget?id=1044937920898936905&theme=dark' width='295' height='390' allowtransparency='true' frameborder='0' sandbox='allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts'></iframe>";
 	echo "</div>";
 ?>
