@@ -54,13 +54,24 @@ while ($post = mysqli_fetch_array($res))
 	echo "</div>";
 }
 
+$url = $_SERVER["QUERY_STRING"];
+$url = parse_url($url, PHP_URL_HOST);
+
 $query = "SELECT COUNT(id) FROM posts";
 $res = mysqli_query($db, $query);
 $res = mysqli_fetch_array($res);
 $res = $res[0];
 $res = intdiv($res, $postcount) + 1;
 echo "<div class='pagecount'>";
+if($page > 1)
+{
+	echo "<a href='" . $url . "?page=" . ($page - 1) . "'><< </a>";
+}
 echo "Page " . $page . " out of " . $res;
+if($page < $res)
+{
+	echo "<a href='" . $url . "?page=" . ($page + 1) . "'> >></a>";
+}
 echo "</div>";
 
 mysqli_close($db);
