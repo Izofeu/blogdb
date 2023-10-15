@@ -29,6 +29,9 @@ body
 
 .top_container
 {
+	max-width: 100%;
+	margin-right: 50px;
+	margin-left: 50px;
 	width: 1050px;
 	height: auto;
 	background-color: #333333;
@@ -91,8 +94,9 @@ h2
 
 .container1
 {
-	padding-right: 30px;
-	width: 620px;
+	/*padding-right: 30px;*/
+	min-width: 620px;
+	max-width: 100%;
 	display: flex;
 	flex-wrap: wrap;
 	float: left;
@@ -103,7 +107,7 @@ h2
 
 .container2
 {
-	float: left;
+	float: right;
 	width: 325px;
 	padding-top: 20px;
 }
@@ -115,6 +119,7 @@ h2
 
 .subtext
 {
+	padding-left: 5px;
 	background-color: #303030;
 	color: #aaaaaa;
 }
@@ -219,4 +224,44 @@ a:hover
 	text-align: center;
 	padding-top: 20px;
 	width: 100%;
+}
+
+@media only screen and (min-width: 1817px)
+{
+	.top_container
+	{
+		width: 1700px;
+	}
+}
+
+@media only screen and (min-width: 2467px)
+{
+	.top_container
+	{
+		width: 2350px;
+	}
+}
+
+@media only screen and (min-width: 3117px)
+{
+	.top_container
+	{
+		width: 3000px;
+	}
+}
+
+@media only screen and (min-width: 3767px)
+{
+	.top_container
+	{
+		width: 3650px;
+	}
+}
+
+@media only screen and (min-width: 4417px)
+{
+	.top_container
+	{
+		width: 4300px;
+	}
 }
