@@ -124,12 +124,6 @@ h2
 	color: #aaaaaa;
 }
 
-.sidetext
-{
-	color: #aaaaaa;
-	font-size: 14px;
-}
-
 .post
 {
 	width: 620px;
@@ -175,6 +169,7 @@ a:hover
 .searchbox
 {
 	width: 225px;
+	margin-right: 2px;
 }
 
 .button_searchbox
@@ -229,70 +224,4 @@ a:hover
 	text-align: center;
 	padding-top: 20px;
 	width: 100%;
-}
-
-.textfield
-{
-	background-color: #444444;
-	margin-right: 2px;
-}
-
-.button
-{
-	color: #cccccc;
-	background-color: #333333;
-	border: 2px solid #cccccc;
-	border-radius: 4px;
-}
-
-.button:hover
-{
-	background-color:#444444;
-}
-      
-.button:active
-{
-	background-color:#cccccc;
-	color:#333333;
-	border:2px solid #333333;
-}
-
-@media only screen and (min-width: 1817px)
-{
-	.top_container
-	{
-		width: 1700px;
-	}
-}
-
-@media only screen and (min-width: 2467px)
-{
-	.top_container
-	{
-		width: 2350px;
-	}
-}
-
-@media only screen and (min-width: 3117px)
-{
-	.top_container
-	{
-		width: 3000px;
-	}
-}
-
-@media only screen and (min-width: 3767px)
-{
-	.top_container
-	{
-		width: 3650px;
-	}
-}
-
-@media only screen and (min-width: 4417px)
-{
-	.top_container
-	{
-		width: 4300px;
-	}
 }

@@ -1,9 +1,22 @@
+<?php
+	require("scripts/cookies.php");
+?>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
 	<meta charset="utf-8">
 	<meta content="adult" name="rating">
-	<link rel="stylesheet" href="styles.css" type="text/css">
+	<?php
+		if(isset($_GET["id"]))
+		{
+			echo "<link rel='stylesheet' href='styles_noexpand.css' type='text/css'>";
+		}
+		else
+		{
+			echo "<link rel='stylesheet' href='styles.css' type='text/css'>";
+		}
+	?>
+	
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 	<title>Nutsuki suu's videos</title>
 	

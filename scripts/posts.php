@@ -13,10 +13,11 @@ if(isset($_GET["page"]))
 {
 	if(is_numeric($_GET["page"]))
 	{
-		if($_GET["page"] > 0)
+		$get_page = intval($_GET["page"]);
+		if($get_page > 0)
 		{
-			$page = $_GET["page"];
-			$offset = ($_GET["page"] * 20) - 20;
+			$page = $get_page;
+			$offset = ($get_page * 20) - 20;
 			if($offset < 0)
 			{
 				$offset = 0;
@@ -26,7 +27,22 @@ if(isset($_GET["page"]))
 }
 
 $postcount = 20;
+
+$ispost = false;
 $query = "SELECT * FROM posts ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+if(isset($_GET["id"]))
+{
+	if(is_numeric($_GET["id"]))
+	{
+		$get_id = intval($_GET["id"]);
+		if($get_id > 0)
+		{
+			$ispost = true;
+			$query = "SELECT * FROM posts WHERE id = " . $get_id;
+		}
+	}
+}
+
 $res = mysqli_query($db, $query);
 # 0 - id
 # 1 - title
@@ -39,7 +55,7 @@ $res = mysqli_query($db, $query);
 while ($post = mysqli_fetch_array($res))
 {
 	echo "<div class='post'>";
-	echo "<h3><a href='https://www.nutsuki.fun/post.php?id=" . $post[0] . "'>" . $post[1] . "</a></h3>";
+	echo "<h3><a href='?id=" . $post[0] . "'>" . $post[1] . "</a></h3>";
 	echo "<video controls name='media' preload='none' class='lazy videostags' data-poster='" . $post[6] . "'>";
 	echo "<source src='" . $post[5] . "' type='video/mp4'>";
 	echo "</video>";
@@ -54,25 +70,27 @@ while ($post = mysqli_fetch_array($res))
 	echo "</div>";
 }
 
-$url = $_SERVER["QUERY_STRING"];
-$url = parse_url($url, PHP_URL_HOST);
 
-$query = "SELECT COUNT(id) FROM posts";
-$res = mysqli_query($db, $query);
-$res = mysqli_fetch_array($res);
-$res = $res[0];
-$res = intdiv($res, $postcount) + 1;
-echo "<div class='pagecount'>";
-if($page > 1)
+if(!$ispost)
 {
-	echo "<a href='" . $url . "?page=" . ($page - 1) . "'><< </a>";
+	$query = "SELECT COUNT(id) FROM posts";
+	$res = mysqli_query($db, $query);
+	$res = mysqli_fetch_array($res);
+	$res = $res[0];
+	$res = intdiv($res, $postcount) + 1;
+	echo "<div class='pagecount'>";
+	if($page > 1)
+	{
+		echo "<a href='?page=" . ($page - 1) . "'><< </a>";
+	}
+	echo "Page " . $page . " out of " . $res;
+	if($page < $res)
+	{
+		echo "<a href='?page=" . ($page + 1) . "'> >></a>";
+	}
+	echo "</div>";
 }
-echo "Page " . $page . " out of " . $res;
-if($page < $res)
-{
-	echo "<a href='" . $url . "?page=" . ($page + 1) . "'> >></a>";
-}
-echo "</div>";
+
 
 mysqli_close($db);
 echo "<script src='lazyload.js'></script>";

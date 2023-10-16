@@ -35,10 +35,46 @@
 	echo "<div class='searchbar gadgets'>";
 	echo "<h3 class='gadgets_top_text'>Search for...</h3>";
 	echo "<form action='search.php' method='post'>";
-	echo "<input type='text' name='searchquery' class='searchbox'>";
-	echo "<input type='submit' class='button_searchbox'>";
+	echo "<input type='text' name='searchquery' class='searchbox textfield'>";
+	echo "<input type='submit' class='button button_searchbox'>";
 	echo "</form>";
 	echo "</div>";
+	
+	# Authentication
+	if($isauth)
+	{
+		$authtext = "shown";
+	}
+	else
+	{
+		$authtext = "hidden";
+	}
+	echo "<div class='authentication gadgets'>";
+	echo "<h3 class='gadgets_top_text'>Authentication</h3>";
+	echo "<div class='sidetext'>";
+	if(isset($authsuccessful))
+	{
+		if($authsuccessful)
+		{
+			echo "Authentication successful. ";
+		}
+		else
+		{
+			echo "Authentication unsuccessful. ";
+		}
+	}
+	echo "Paid content " . $authtext . ".</div>";
+	if(!$isauth)
+	{
+		echo "<div>";
+		echo "<form action='index.php' method='post'>";
+		echo "<input class='textfield' type='text' name='auth'>";
+		echo "<input class='button' type='submit' value='Authenticate'>";
+		echo "</form>";
+		echo "</div>";
+	}
+	echo "</div>";
+	
 	
 	# Information
 	echo "<div class='information gadgets'>";
