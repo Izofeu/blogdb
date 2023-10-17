@@ -34,9 +34,13 @@
 	# Search bar
 	echo "<div class='searchbar gadgets'>";
 	echo "<h3 class='gadgets_top_text'>Search for...</h3>";
-	echo "<form action='search.php' method='post'>";
+	echo "<form action='index.php' method='get'>";
 	echo "<input type='text' name='searchquery' class='searchbox textfield'>";
-	echo "<input type='submit' class='button button_searchbox'>";
+	echo "<input type='submit' class='button button_searchbox'><br>";
+	echo "<input type='radio' class='radiobutton' id='searchbytitle' name='searchtype' value='0' checked>";
+	echo "<label class='searchlabel' for='searchbytitle'>By title</label><br>";
+	echo "<input type='radio' class='radiobutton' id='searchbytags' name='searchtype' value='1'>";
+	echo "<label class='searchlabel' for='searchbytags'>By tags (separated by space)</label>";
 	echo "</form>";
 	echo "</div>";
 	

@@ -55,8 +55,8 @@
 						</div>
 						<div class="sidebar">
 							<?php
-							require("scripts/sidebar.php");
-						?>
+								require("scripts/sidebar.php");
+							?>
 						</div>
 					</div>
 					
