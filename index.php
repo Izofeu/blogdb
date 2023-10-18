@@ -1,12 +1,16 @@
 <?php
+	// ob_start(null,);
 	require("scripts/cookies.php");
 ?>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
 	<meta charset="utf-8">
+	<meta name="author" content="Izofeu">
+	<meta name="publisher" content="Nutsuki suu">
 	<meta content="adult" name="rating">
 	<?php
+		// require("scripts/opengraph.php");
 		if(isset($_GET["id"]))
 		{
 			echo "<link rel='stylesheet' href='styles_noexpand.css' type='text/css'>";
@@ -19,9 +23,6 @@
 	
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 	<title>Nutsuki suu's videos</title>
-	
-	<!-- Embeds -->
-	<meta content="https://nutsuki.fun" property='og:url'/>
 </head>
 <body class="bg_dark font">
 	<div class="root_container">
@@ -68,3 +69,6 @@
 	</div>
 </body>
 </html>
+<?php
+// ob_end_flush();
+?>

@@ -109,4 +109,25 @@
 	echo "<h3 class='gadgets_top_text'>Discord server</h3>";
 	echo "<iframe src='https://discord.com/widget?id=1044937920898936905&theme=dark' width='295' height='390' allowtransparency='true' frameborder='0' sandbox='allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts'></iframe>";
 	echo "</div>";
+	
+	# Admin login
+	echo "<div class='adminlogin gadgets'>";
+	echo "<h3 class='gadgets_top_text'>Admin login</h3>";
+	if($showadminui)
+	{
+		echo "<div>Authenticated as " . htmlspecialchars($adminusername) . ".</div>";
+		echo "<form action='index.php' method='post'>";
+		echo "<input type='hidden' name='logout'>";
+		echo "<input type='submit' class='button' value='Log out'>";
+		echo "</form>";
+	}
+	else
+	{
+		echo "<form action='index.php' method='post'>";
+		echo "<input type='text' class='loginfield' placeholder='User name' name='user'>";
+		echo "<input type='password' class='loginfield' placeholder='Password' name='password'>";
+		echo "<input type='submit' class='button' value='Log in'>";
+		echo "</form>";
+	}
+	echo "</div>";
 ?>
