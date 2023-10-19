@@ -1,13 +1,5 @@
 <?php
-// Read the password to the database
-$pwdfile = fopen("scripts/password.pwd", "r") or die ("Cannot open password file.");
-$pwd = fread($pwdfile, filesize("scripts/password.pwd"));
-fclose($pwdfile);
-$db = mysqli_connect("localhost", "pyth", $pwd, "website");
-if (mysqli_connect_errno())
-{
-	die("Cannot connect to the database.");
-}
+$db = db_open();
 // This variable is a default offset in case it doesn't get set by the code
 $offset = 0;
 // This variable is a default page number
@@ -168,32 +160,65 @@ if($issearch)
 	echo ".";
 	echo "</div>";
 }
-while ($post = mysqli_fetch_array($res))
+
+if(isset($postdeletesuccess))
 {
-	echo "<div class='post'>";
-	echo "<h3><a ";
-	if($post[7])
-	{
-		echo "class='paidpost' ";
-	}
-	echo "href='?id=" . $post[0] . "'>";
-	if($post[7])
-	{
-		echo "[PAID] ";
-	}
-	echo $post[1] . "</a></h3>";
-	echo "<video controls name='media' preload='none' class='lazy videostags' data-poster='" . $post[6] . "'>";
-	echo "<source src='" . $post[5] . "' type='video/mp4'>";
-	echo "</video>";
-	echo "<div class='hfiller20px'>";
+	echo "<div class='searchquerytext'>";
+	echo "Post deleted successfully.";
 	echo "</div>";
-	echo "<div class='horizontal_line'>";
-	echo "</div>";
+}
+
+if($ispost && isset($_GET["postedit"]))
+{
+	if(!isadmin())
+	{
+		die("Not an admin.");
+	}
 	echo "<div class='subtext'>";
-	echo "<div>Posted by " . $post[3] . " at " . $post[4] . ".</div>";
-	echo "<div>Tags: " . $post[2] . "</div>";
 	echo "</div>";
-	echo "</div>";
+}
+else
+{
+	while ($post = mysqli_fetch_array($res))
+	{
+		echo "<div class='post'>";
+		echo "<h3><a ";
+		if($post[7])
+		{
+			echo "class='paidpost' ";
+		}
+		echo "href='?id=" . $post[0] . "'>";
+		if($post[7])
+		{
+			echo "[PAID] ";
+		}
+		echo $post[1] . "</a></h3>";
+		echo "<video controls name='media' preload='none' class='lazy videostags' data-poster='" . $post[6] . "'>";
+		echo "<source src='" . $post[5] . "' type='video/mp4'>";
+		echo "</video>";
+		echo "<div class='hfiller20px'>";
+		echo "</div>";
+		echo "<div class='horizontal_line'>";
+		echo "</div>";
+		echo "<div class='subtext'>";
+		echo "<div>Posted by " . $post[3] . " at " . $post[4] . ".</div>";
+		echo "<div>Tags: " . $post[2] . "</div>";
+		echo "</div>";
+		if($showadminui)
+		{
+			echo "<div style='display:flex;'>";
+			echo "<form action='index.php' method='get'>";
+			echo "<input type='hidden' name='id' value='" . $post[0] . "'>";
+			echo "<input type='submit' class='button' name='postedit' value='Edit'>";
+			echo "</form>";
+			echo "<form action='index.php' method='post' onsubmit=\"return confirm('Are you sure you want to delete this post?')\">";
+			echo "<input type='hidden' name='postdelete_id' value='" . $post[0] . "'>";
+			echo "<input type='submit' class='button marginleft' name='postdelete' value='Delete'>";
+			echo "</form>";
+			echo "</div>";
+		}
+		echo "</div>";
+	}
 }
 
 // Count results and display Page x of y if user isn't browsing a single post

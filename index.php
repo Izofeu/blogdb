@@ -1,6 +1,8 @@
 <?php
 	// ob_start(null,);
+	require("scripts/db_open.php");
 	require("scripts/cookies.php");
+	require("scripts/isadmin.php");
 ?>
 <!DOCTYPE html>
 <html lang="en-US">
@@ -20,6 +22,10 @@
 		else
 		{
 			echo "<link rel='stylesheet' href='styles.css' type='text/css'>";
+		}
+		if(isset($_POST["postdelete_id"]))
+		{
+			require("scripts/deletepost.php");
 		}
 	?>
 	

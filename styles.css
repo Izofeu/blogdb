@@ -317,6 +317,11 @@ h3
 	color: #c56cc5;
 }
 
+.marginleft
+{
+	margin-left: 5px;
+}
+
 @media only screen and (min-width: 1817px)
 {
 	.top_container
