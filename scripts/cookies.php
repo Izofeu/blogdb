@@ -3,7 +3,9 @@
 	
 	# Authentication for paid posts
 	$isauth = false;
-	$auth = "123";
+	$authfile = fopen("scripts/auth.pwd", "r") or die ("Cannot open password file.");
+	$auth = fread($authfile, filesize("scripts/auth.pwd"));
+	fclose($authfile);
 	if(isset($_COOKIE["auth"]))
 	{
 		if($_COOKIE["auth"] == $auth)

@@ -9,8 +9,10 @@
 	<meta name="author" content="Izofeu">
 	<meta name="publisher" content="Nutsuki suu">
 	<meta content="adult" name="rating">
+	<meta content='website' property='og:type'>
+	<meta content='en_US' property='og:locale'>
 	<?php
-		// require("scripts/opengraph.php");
+		require("scripts/opengraph.php");
 		if(isset($_GET["id"]))
 		{
 			echo "<link rel='stylesheet' href='styles_noexpand.css' type='text/css'>";

@@ -124,6 +124,12 @@ h2
 	color: #aaaaaa;
 }
 
+.sidetext
+{
+	color: #aaaaaa;
+	font-size: 16px;
+}
+
 .post
 {
 	width: 620px;
@@ -157,19 +163,24 @@ a:hover
 
 .gadgets
 {
-	padding-bottom: 30px;
+	padding-bottom: 20px;
+}
+
+h3
+{
+	margin-bottom: 10px;
 }
 
 .gadgets_top_text
 {
-	font: normal bold 11px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
+	font: normal bold 14px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
 	color: white;
 }
 
 .searchbox
 {
 	width: 225px;
-	margin-right: 2px;
+	margin-bottom: 5px;
 }
 
 .button_searchbox
@@ -224,4 +235,84 @@ a:hover
 	text-align: center;
 	padding-top: 20px;
 	width: 100%;
+}
+
+.textfield
+{
+	background-color: #444444;
+	margin-right: 2px;
+	color: white;
+}
+
+.button
+{
+	color: #cccccc;
+	background-color: #333333;
+	border: 2px solid #cccccc;
+	border-radius: 4px;
+}
+
+.button:hover
+{
+	background-color:#444444;
+}
+      
+.button:active
+{
+	background-color:#cccccc;
+	color:#333333;
+	border:2px solid #333333;
+}
+
+.radiobutton
+{
+	margin-left: 0px;
+	padding-right: 4px;
+}
+
+.searchlabel
+{
+	padding-left: 5px;
+}
+
+.loginfield
+{
+	background-color: #444444;
+	margin-right: 2px;
+	color: white;
+}
+
+.searchquerytext
+{
+	padding-left: 0px;
+	background-color: #303030;
+	color: #aaaaaa;
+	text-align: center;
+	margin-right: 30px;
+	width: 100%;
+}
+
+.patreonbutton, .youtubebutton
+{
+	padding-bottom: 30px;
+}
+
+.paidpost:link
+{
+	color: #c56cc5;
+}
+
+.paidpost:hover
+{
+	color: #c56cc5;
+}
+
+.paidpost:visited
+{
+	color: #c56cc5;
+}
+
+.paidpost:active
+{
+	color: #c56cc5;
 }
