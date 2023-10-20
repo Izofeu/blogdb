@@ -168,14 +168,63 @@ if(isset($postdeletesuccess))
 	echo "</div>";
 }
 
+if(isset($posteditsuccess))
+{
+	echo "<div class='searchquerytext'>";
+	echo "Post edited successfully.";
+	echo "</div>";
+}
+
 if($ispost && isset($_GET["postedit"]))
 {
 	if(!isadmin())
 	{
 		die("Not an admin.");
 	}
-	echo "<div class='subtext'>";
-	echo "</div>";
+	$res = mysqli_fetch_array($res);
+	if($res)
+	{
+		echo "<div class='post'>";
+		echo "<div class='subtext'>";
+		echo "Editing post " . $res[1] . ":";
+		echo "</div>";
+		echo "<form action='index.php' method='post'>";
+		echo "<input type='hidden' name='edit_id' value='" . $res[0] . "'>";
+		echo "<table class='tableedit'>";
+		echo "<tr>";
+			echo "<th class='rowedit headerrowtable'>Parameter</th>";
+			echo "<th class='rowedit'>Value</th>";
+		echo "</tr>";
+		echo "<tr>";
+			echo "<td class='rowedit parameter'>Title</td>";
+			echo "<td class='rowedit'><textarea maxlength='80' class='textfield editfield' name='edit_title'>" . $res[1] . "</textarea></td>";
+		echo "</tr>";
+		echo "<tr>";
+			echo "<td class='rowedit parameter'>Tags</td>";
+			echo "<td class='rowedit'><textarea maxlength='80' class='textfield editfield' name='edit_tags'>" . $res[2] . "</textarea></td>";
+		echo "</tr>";
+		echo "<tr>";
+			echo "<td class='rowedit parameter'>Video url</td>";
+			echo "<td class='rowedit'><textarea maxlength='256' class='textfield editfield' name='edit_videourl'>" . $res[5] . "</textarea></td>";
+		echo "</tr>";
+		echo "<tr>";
+			echo "<td class='rowedit parameter'>Thumbnail url</td>";
+			echo "<td class='rowedit'><textarea maxlength='256' class='textfield editfield' name='edit_imageurl'>" . $res[6] . "</textarea></td>";
+		echo "</tr>";
+		echo "<tr>";
+			echo "<td class='rowedit parameter'>Is paid</td>";
+			echo "<td class='rowedit'><input type='checkbox' name='edit_ispaid' ";
+			if($res[7])
+			{
+				echo "checked='checked'";
+			}
+			echo "'></td>";
+		echo "</tr>";
+		echo "</table>";
+		echo "<input type='submit' class='button' value='Save changes'>";
+		echo "</form>";
+		echo "</div>";
+	}
 }
 else
 {

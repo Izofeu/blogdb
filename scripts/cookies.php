@@ -55,8 +55,10 @@
 			{
 				setcookie("user", $_POST["user"], time() + (86400 * 7), "/", $domain, true, true);
 				setcookie("password", $res[1], time() + (86400 * 7), "/", $domain, true, true);
+				setcookie("auth", $auth, time() + (86400 * 7), "/", $domain, false, true);
 				$adminusername = $_POST["user"];
 				$showadminui = true;
+				$isauth = true;
 			}
 		}
 		mysqli_close($db);

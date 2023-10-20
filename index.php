@@ -27,6 +27,10 @@
 		{
 			require("scripts/deletepost.php");
 		}
+		if(isset($_POST["edit_id"]))
+		{
+			require("scripts/editpost.php");
+		}
 	?>
 	
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>

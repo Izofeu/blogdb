@@ -316,3 +316,46 @@ h3
 {
 	color: #c56cc5;
 }
+
+.marginleft
+{
+	margin-left: 5px;
+}
+
+.tableedit
+{
+	margin-top: 5px;
+	width: 100%;
+}
+
+.rowedit
+{
+	border:2px solid #888888;
+	color: #cccccc;
+	background-color: #444444;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.headerrowtable
+{
+	width: 25%;
+}
+
+.editfield
+{
+	width: 435px;
+	height: 75px;
+	margin-left: 5px;
+	border-radius: 10px;
+}
+
+textarea
+{
+	resize: none;
+}
+
+.parameter
+{
+	padding-left: 5px;
+}
