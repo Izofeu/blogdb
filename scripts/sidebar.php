@@ -90,11 +90,10 @@
 	echo "<div class='information gadgets'>";
 	echo "<h3 class='gadgets_top_text'>Information</h3>";
 	echo "<ul class='url_list'>
-		<li><a href='https://mikuboard.blogspot.com/p/about_2.html'>About</a></li>
-		<li><a href='https://mikuboard.blogspot.com/p/comment-rules.html'>Comment rules</a></li>
-		<li><a href='https://mikuboard.blogspot.com/p/contact-details.html'>Contact details</a></li>
-		<!--<li><a rel='nofollow' href='https://mikuboard.blogspot.com/p/disable-ads.html' class='redlink'>Ads removal statement</a></li>-->
-		<li><a href='https://mikuboard.blogspot.com/p/settings.html'>Settings</a></li>
+		<li><a href='./index.php?textpost&id=1'>About</a></li>
+		<li style='text-decoration: line-through;'><a href='https://mikuboard.blogspot.com/p/comment-rules.html'>Comment rules</a></li>
+		<li><a href='./index.php?textpost&id=2'>Contact details</a></li>
+		<li style='text-decoration: line-through;'><a href='https://mikuboard.blogspot.com/p/settings.html'>Settings</a></li>
 		</ul>";
 	echo "</div>";
 	
@@ -102,11 +101,11 @@
 	echo "<div class='filter_by gadgets'>";
 	echo "<h3 class='gadgets_top_text'>Filter by</h3>";
 	echo "<ul class='url_list'>
-		<li><a class='mikulink' href='https://mikuboard.blogspot.com/search/label/miku'>Miku</a></li>
-		<li><a class='lukalink' href='https://mikuboard.blogspot.com/search/label/luka'>Luka</a></li>
-		<li><a class='lenlink' href='https://mikuboard.blogspot.com/search/label/rin'>Rin</a></li>
-		<li><a class='hakulink' href='https://mikuboard.blogspot.com/search/label/haku'>Haku</a></li>
-		<li><a class='meikolink' href='https://mikuboard.blogspot.com/search/label/meiko'>Meiko</a></li>
+		<li><a class='mikulink' href='./index.php?searchquery=miku&searchtype=1'>Miku</a></li>
+		<li><a class='lukalink' href='./index.php?searchquery=luka&searchtype=1'>Luka</a></li>
+		<li><a class='lenlink' href='./index.php?searchquery=len&searchtype=1'>Rin</a></li>
+		<li><a class='hakulink' href='./index.php?searchquery=haku&searchtype=1'>Haku</a></li>
+		<li><a class='meikolink' href='./index.php?searchquery=meiko&searchtype=1'>Meiko</a></li>
 		</ul>";
 	echo "</div>";
 	

@@ -42,12 +42,15 @@
 	<title>Nutsuki suu's videos</title>
 </head>
 <body class="bg_dark font">
+	<?php
+		require("scripts/cookienotice.php");
+	?>
 	<div class="root_container">
 		<div class="top_container">
 			<div class="top_container_margin">
 				<div class="top_header">
 					<h1>
-						Nutsuki Suu's videos
+						<a class='h1link' href='./index.php'>Nutsuki Suu's videos</a>
 					</h1>
 					<h2>
 						A list of all Nutsuki's Discord videos.

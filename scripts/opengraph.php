@@ -1,15 +1,8 @@
 <?php
-// Read the password to the database
-$pwdfile = fopen("scripts/password.pwd", "r") or die ("Cannot open password file.");
-$pwd = fread($pwdfile, filesize("scripts/password.pwd"));
-fclose($pwdfile);
-$db = mysqli_connect("localhost", "pyth", $pwd, "website");
-if (mysqli_connect_errno())
-{
-	die("Cannot connect to the database.");
-}
+$db = db_open();
 
 $ispost = false;
+$textpost = false;
 // Check if user is attempting to access a single post page
 if(isset($_GET["id"]))
 {
@@ -21,10 +14,15 @@ if(isset($_GET["id"]))
 			// Single post mode
 			$ispost = true;
 			$query = "SELECT * FROM posts WHERE id = " . $get_id;
+			if(isset($_GET["textpost"]))
+			{
+				$textpost = true;
+				$query = "SELECT * FROM textposts WHERE id = " . $get_id;
+			}
 		}
 	}
 }
-if($ispost)
+if($ispost && !$textpost)
 {
 	$res = mysqli_query($db, $query);
 	$res = mysqli_fetch_array($res);
@@ -49,6 +47,18 @@ if($ispost)
 		echo "<meta property='og:url' content='https://" . $domain . "/index.php?id=" . $res[0] . "'>";
 		echo "<meta property='og:description' content='A frontend for watching Nutsuki&#39;s videos. This video has the following tags: " . $res[2] . ".'>";
 		echo "<meta property='description' content='A frontend for watching Nutsuki&#39;s videos. This video has the following tags: " . $res[2] . ".'>";
+	}
+}
+else if($textpost)
+{
+	$res = mysqli_query($db, $query);
+	$res = mysqli_fetch_array($res);
+	if($res)
+	{
+		echo "<meta property='og:title' content='" . $res[2] . "'>";
+		echo "<meta property='og:url' content='https://" . $domain . "/index.php?textpost&id=" . $res[0] . "'>";
+		echo "<meta property='og:description' content='A frontend for watching Nutsuki&#39;s videos.'>";
+		echo "<meta property='description' content='A frontend for watching Nutsuki&#39;s videos.'>";
 	}
 }
 else

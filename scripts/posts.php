@@ -29,6 +29,7 @@ $postcount = 20;
 $issearch = false;
 $ispost = false;
 $searchbytags = false;
+$textpost = false;
 // Prepare default query to get posts
 $query = "SELECT * FROM posts WHERE ispaid = 0 ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
 // Default query if user is a paid user
@@ -51,6 +52,12 @@ if(isset($_GET["id"]))
 			if($isauth)
 			{
 				$query = "SELECT * FROM posts WHERE id = " . $get_id;
+			}
+			// Does the user request a text post rather than a video post?
+			if(isset($_GET["textpost"]))
+			{
+				$textpost = true;
+				$query = "SELECT * FROM textposts WHERE id = " . $get_id;
 			}
 		}
 	}
@@ -267,9 +274,9 @@ else if(isset($_POST["insertpost"]))
 	echo "</form>";
 	echo "</div>";
 }
-else
+else if(!$textpost)
 {
-	while ($post = mysqli_fetch_array($res))
+	while($post = mysqli_fetch_array($res))
 	{
 		echo "<div class='post'>";
 		echo "<h3><a ";
@@ -307,6 +314,17 @@ else
 			echo "</form>";
 			echo "</div>";
 		}
+		echo "</div>";
+	}
+}
+else
+{
+	$post = mysqli_fetch_array($res);
+	if($post)
+	{
+		echo "<div class='post'>";
+		echo "<h3>" . $post[2] . "</h3>";
+		echo $post[1];
 		echo "</div>";
 	}
 }

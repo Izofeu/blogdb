@@ -340,6 +340,7 @@ h3
 .headerrowtable
 {
 	width: 25%;
+	
 }
 
 .editfield
@@ -358,4 +359,9 @@ textarea
 .parameter
 {
 	padding-left: 5px;
+}
+
+.h1link:link, .h1link:visited, .h1link:active, .h1link:hover
+{
+	color: white;
 }

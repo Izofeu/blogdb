@@ -1,6 +1,11 @@
 <?php
 	$domain = "nutsuki.fun";
 	
+	# Cookie notice cookie
+	if(isset($_COOKIE["cookienoticeviewed"]))
+	{
+		setcookie("cookienoticeviewed", 1, time() + (86400 * 365), "/", $domain, false, false);
+	}
 	# Authentication for paid posts
 	$isauth = false;
 	$authfile = fopen("scripts/auth.pwd", "r") or die ("Cannot open password file.");
