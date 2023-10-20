@@ -1,5 +1,6 @@
 <?php
 	// ob_start(null,);
+	require("scripts/config.php");
 	require("scripts/db_open.php");
 	require("scripts/cookies.php");
 	require("scripts/isadmin.php");
@@ -15,7 +16,7 @@
 	<meta content='en_US' property='og:locale'>
 	<?php
 		require("scripts/opengraph.php");
-		if(isset($_GET["id"]))
+		if(isset($_GET["id"]) || isset($_POST["insertpost"]))
 		{
 			echo "<link rel='stylesheet' href='styles_noexpand.css' type='text/css'>";
 		}
@@ -30,6 +31,10 @@
 		if(isset($_POST["edit_id"]))
 		{
 			require("scripts/editpost.php");
+		}
+		if(isset($_POST["insert_title"]))
+		{
+			require("scripts/insertpost.php");
 		}
 	?>
 	

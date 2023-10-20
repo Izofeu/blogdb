@@ -226,6 +226,47 @@ if($ispost && isset($_GET["postedit"]))
 		echo "</div>";
 	}
 }
+else if(isset($_POST["insertpost"]))
+{
+	if(!isadmin())
+	{
+		die("Not an admin.");
+	}
+	echo "<div class='post'>";
+	echo "<div class='subtext'>";
+	echo "Adding a post:";
+	echo "</div>";
+	echo "<form action='index.php' method='post'>";
+	echo "<table class='tableedit'>";
+	echo "<tr>";
+		echo "<th class='rowedit headerrowtable'>Parameter</th>";
+		echo "<th class='rowedit'>Value</th>";
+	echo "</tr>";
+	echo "<tr>";
+		echo "<td class='rowedit parameter'>Title</td>";
+		echo "<td class='rowedit'><textarea maxlength='80' class='textfield editfield' name='insert_title'></textarea></td>";
+	echo "</tr>";
+	echo "<tr>";
+		echo "<td class='rowedit parameter'>Tags</td>";
+		echo "<td class='rowedit'><textarea maxlength='80' class='textfield editfield' name='insert_tags'></textarea></td>";
+	echo "</tr>";
+	echo "<tr>";
+		echo "<td class='rowedit parameter'>Video url</td>";
+		echo "<td class='rowedit'><textarea maxlength='256' class='textfield editfield' name='insert_videourl'></textarea></td>";
+	echo "</tr>";
+	echo "<tr>";
+		echo "<td class='rowedit parameter'>Thumbnail url</td>";
+		echo "<td class='rowedit'><textarea maxlength='256' class='textfield editfield' name='insert_imageurl'></textarea></td>";
+	echo "</tr>";
+	echo "<tr>";
+		echo "<td class='rowedit parameter'>Is paid</td>";
+		echo "<td class='rowedit'><input type='checkbox' name='insert_ispaid'></td>";
+	echo "</tr>";
+	echo "</table>";
+	echo "<input type='submit' class='button' value='Submit post'>";
+	echo "</form>";
+	echo "</div>";
+}
 else
 {
 	while ($post = mysqli_fetch_array($res))
@@ -271,7 +312,7 @@ else
 }
 
 // Count results and display Page x of y if user isn't browsing a single post
-if(!$ispost)
+if(!$ispost && !isset($_POST["insertpost"]))
 {
 	// Count query for proper displaying of Page x of y
 	$query = "SELECT COUNT(id) FROM posts WHERE ispaid = 0";

@@ -77,6 +77,12 @@
 		echo "</form>";
 		echo "</div>";
 	}
+	if($showadminui)
+	{
+		echo "<form action='index.php' method='post'>";
+		echo "<input type='submit' name='insertpost' class='button' value='Add post'>";
+		echo "</form>";
+	}
 	echo "</div>";
 	
 	
