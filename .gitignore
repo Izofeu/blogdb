@@ -1,2 +1,3 @@
 # All .pwd text files are ignored as these are the files that contain sensitive data.
 *.pwd
+scripts/tracking.php

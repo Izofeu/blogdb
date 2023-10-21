@@ -26,6 +26,7 @@ if(isset($_GET["page"]))
 $postcount = 20;
 
 // Setting default variables, do NOT edit these
+$nopost = true;
 $issearch = false;
 $ispost = false;
 $searchbytags = false;
@@ -191,6 +192,7 @@ if($ispost && isset($_GET["postedit"]))
 	$res = mysqli_fetch_array($res);
 	if($res)
 	{
+		$nopost = false;
 		echo "<div class='post'>";
 		echo "<div class='subtext'>";
 		echo "Editing post " . $res[1] . ":";
@@ -278,6 +280,7 @@ else if(!$textpost)
 {
 	while($post = mysqli_fetch_array($res))
 	{
+		$nopost = false;
 		echo "<div class='post'>";
 		echo "<h3><a ";
 		if($post[7])
@@ -322,6 +325,7 @@ else
 	$post = mysqli_fetch_array($res);
 	if($post)
 	{
+		$nopost = false;
 		echo "<div class='post'>";
 		echo "<h3>" . $post[2] . "</h3>";
 		echo $post[1];
@@ -329,8 +333,18 @@ else
 	}
 }
 
+if($nopost && !isset($_POST["insertpost"]))
+{
+	echo "<div class='post'>";
+	echo "<h3>No results</h3>";
+	echo "<div class=''>";
+	echo "No content was found that matches the criteria. The post(s) either don't exist, or you don't have permission to view the content.";
+	echo "</div>";
+	echo "</div>";
+}
+
 // Count results and display Page x of y if user isn't browsing a single post
-if(!$ispost && !isset($_POST["insertpost"]))
+if(!$ispost && !isset($_POST["insertpost"]) && !$nopost)
 {
 	// Count query for proper displaying of Page x of y
 	$query = "SELECT COUNT(id) FROM posts WHERE ispaid = 0";
@@ -376,7 +390,7 @@ if(!$ispost && !isset($_POST["insertpost"]))
 		// Add search query if searching
 		if($issearch)
 		{
-			echo "&searchquery=" . $_GET["searchquery"];
+			echo "&searchquery=" . htmlspecialchars($_GET["searchquery"]);
 			if($searchbytags)
 			{
 				// Add search by tags if searching by tags
@@ -394,7 +408,7 @@ if(!$ispost && !isset($_POST["insertpost"]))
 		// Add search query if searching
 		if($issearch)
 		{
-			echo "&searchquery=" . $_GET["searchquery"];
+			echo "&searchquery=" . htmlspecialchars($_GET["searchquery"]);
 			if($searchbytags)
 			{
 				// Add search by tags if searching by tags

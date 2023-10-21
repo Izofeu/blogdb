@@ -8,6 +8,9 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
+	<?php
+		require("scripts/tracking.php");
+	?>
 	<meta charset="utf-8">
 	<meta name="author" content="Izofeu">
 	<meta name="publisher" content="Nutsuki suu">
