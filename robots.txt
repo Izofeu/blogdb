@@ -1,2 +1,3 @@
 User-agent: *
 Allow: /
+Sitemap: https://nutsuki.fun/sitemap.php
