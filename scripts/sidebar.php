@@ -97,6 +97,32 @@
 		</ul>";
 	echo "</div>";
 	
+	# Settings
+	echo "<div class='settingsgadget gadgets'>";
+	echo "<h3 class='gadgets_top_text'>Settings</h3>";
+	echo "<button class='button' id='settings_toggle' data-settingsopen='0' onclick='settings_toggle()'>Open settings</button>";
+	echo "<div class='settings' id='settings'>";
+	echo "<div title='hover test'>";
+	echo "Google analytics - ";
+	echo "<span class='googleanalyticsstatus' id='googleanalyticsstatus' data-googleanalyticsstatus='";
+	if(!$analyticsenabledcookie)
+	{
+		echo "0'>Disabled";
+	}
+	else
+	{
+		echo "1'>Enabled";
+	}
+	echo "</span>";
+	echo "</div>";
+	echo "<div>";
+	echo "<form action='index.php' method='post' onsubmit='return confirm_analytics()'>";
+	echo "<input type='submit' name='toggleanalytics' class='button' value='Toggle'>";
+	echo "</form>";
+	echo "</div>";
+	echo "</div>";
+	echo "</div>";
+	
 	# Filter by tags
 	echo "<div class='filter_by gadgets'>";
 	echo "<h3 class='gadgets_top_text'>Filter by</h3>";

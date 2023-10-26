@@ -9,7 +9,10 @@
 <html lang="en-US">
 <head>
 	<?php
-		require("scripts/tracking.php");
+		if($analyticsenabledcookie)
+		{
+			require("scripts/tracking.php");
+		}
 	?>
 	<meta charset="utf-8">
 	<meta name="author" content="Izofeu">
@@ -45,6 +48,8 @@
 	<title>Nutsuki suu's videos</title>
 </head>
 <body class="bg_dark font">
+	<script src="scripts.js">
+	</script>
 	<?php
 		require("scripts/cookienotice.php");
 	?>
@@ -69,10 +74,12 @@
 						<?php
 							error_reporting(E_ALL);
 							require("scripts/posts.php");
+							if($include_footer)
+							{
+								require("scripts/footer.php");
+							}
 						?>
 					</div>
-					
-					
 					
 					<div class="containers container2">
 						<div class="vertical_line" style="float: left;">

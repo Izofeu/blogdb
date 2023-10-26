@@ -390,3 +390,19 @@ textarea
 	border: 5px solid #cccccc;
 	border-radius: 20px;
 }
+
+.footer
+{
+	width: 100%;
+	text-align: center;
+}
+
+.settings
+{
+	display: none;
+}
+
+.googleanalyticsstatus
+{
+	font-weight: bold;
+}

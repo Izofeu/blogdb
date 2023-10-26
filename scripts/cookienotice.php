@@ -9,7 +9,6 @@ if(!isset($_COOKIE["cookienoticeviewed"]))
 		. " More information about cookies can be accessed in the About page. Cookies can be"
 		. " blocked in your browser settings.";
 	echo "</div>";
-	echo "<script src='removecookies.js'></script>";
 	echo "<button onclick='removecookie()' class='button cookienoticebutton'>DISMISS</button>";
 	echo "</div>";
 }

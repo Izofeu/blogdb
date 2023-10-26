@@ -4,7 +4,7 @@
 	# Cookie notice cookie
 	if(isset($_COOKIE["cookienoticeviewed"]))
 	{
-		setcookie("cookienoticeviewed", 1, time() + (86400 * 365), "/", $domain, false, false);
+		setcookie("cookienoticeviewed", 1, time() + (86400 * 7), "/", $domain, false, false);
 	}
 	# Authentication for paid posts
 	$isauth = false;
@@ -68,5 +68,24 @@
 			}
 		}
 		mysqli_close($db);
+	}
+	$analyticsenabledcookie = true;
+	if(isset($_POST["toggleanalytics"]))
+	{
+		if(isset($_COOKIE["googleanalyticsdisabled"]))
+		{
+			$analyticsenabledcookie = true;
+			setcookie("googleanalyticsdisabled", null, 1, "/", $domain, false, false);
+		}
+		else
+		{
+			$analyticsenabledcookie = false;
+			setcookie("googleanalyticsdisabled", 1, time() + (86400 * 7), "/", $domain, false, false);
+		}
+	}
+	else if(isset($_COOKIE["googleanalyticsdisabled"]))
+	{
+		setcookie("googleanalyticsdisabled", 1, time() + (86400 * 7), "/", $domain, false, false);
+		$analyticsenabledcookie = false;
 	}
 ?>
