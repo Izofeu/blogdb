@@ -208,6 +208,13 @@ if(isset($posteditsuccess))
 	echo "</div>";
 }
 
+if(isset($postinsertsuccess))
+{
+	echo "<div class='searchquerytext'>";
+	echo "Post added successfully.";
+	echo "</div>";
+}
+
 if($ispost && isset($_GET["postedit"]))
 {
 	$nopost = false;
@@ -233,10 +240,10 @@ if($ispost && isset($_GET["postedit"]))
 			{
 				echo "<div class='post'>";
 				echo "<div class='subtext'>";
-				echo "Editing post " . $res[1] . ":";
+				echo "Editing post " . htmlspecialchars($res[1]) . ":";
 				echo "</div>";
 				echo "<form action='index.php' method='post'>";
-				echo "<input type='hidden' name='edit_id' value='" . $res[0] . "'>";
+				echo "<input type='hidden' name='edit_id' value='" . htmlspecialchars($res[0]) . "'>";
 				echo "<table class='tableedit'>";
 				echo "<tr>";
 					echo "<th class='rowedit headerrowtable'>Parameter</th>";
@@ -244,19 +251,19 @@ if($ispost && isset($_GET["postedit"]))
 				echo "</tr>";
 				echo "<tr>";
 					echo "<td class='rowedit parameter'>Title</td>";
-					echo "<td class='rowedit'><textarea maxlength='80' class='textfield editfield' name='edit_title'>" . $res[1] . "</textarea></td>";
+					echo "<td class='rowedit'><textarea maxlength='80' class='textfield editfield' name='edit_title'>" . htmlspecialchars($res[1]) . "</textarea></td>";
 				echo "</tr>";
 				echo "<tr>";
 					echo "<td class='rowedit parameter'>Tags</td>";
-					echo "<td class='rowedit'><textarea maxlength='80' class='textfield editfield' name='edit_tags'>" . $res[2] . "</textarea></td>";
+					echo "<td class='rowedit'><textarea maxlength='80' class='textfield editfield' name='edit_tags'>" . htmlspecialchars($res[2]) . "</textarea></td>";
 				echo "</tr>";
 				echo "<tr>";
 					echo "<td class='rowedit parameter'>Video url</td>";
-					echo "<td class='rowedit'><textarea maxlength='256' class='textfield editfield' name='edit_videourl'>" . $res[5] . "</textarea></td>";
+					echo "<td class='rowedit'><textarea maxlength='256' class='textfield editfield' name='edit_videourl'>" . htmlspecialchars($res[5]) . "</textarea></td>";
 				echo "</tr>";
 				echo "<tr>";
 					echo "<td class='rowedit parameter'>Thumbnail url</td>";
-					echo "<td class='rowedit'><textarea maxlength='256' class='textfield editfield' name='edit_imageurl'>" . $res[6] . "</textarea></td>";
+					echo "<td class='rowedit'><textarea maxlength='256' class='textfield editfield' name='edit_imageurl'>" . htmlspecialchars($res[6]) . "</textarea></td>";
 				echo "</tr>";
 				echo "<tr>";
 					echo "<td class='rowedit parameter'>Is paid</td>";
@@ -274,6 +281,20 @@ if($ispost && isset($_GET["postedit"]))
 			}
 		}
 	}
+}
+else if(isset($loginsuccessful))
+{
+	echo "<div class='searchquerytext'>";
+	$nopost = false;
+	if($loginsuccessful)
+	{
+		echo "Welcome back, " . htmlspecialchars($_POST["user"]) . ". Refreshing in 2 seconds..";
+	}
+	else
+	{
+		echo "Invalid credentials.";
+	}
+	echo "</div>";
 }
 else if(isset($_POST["insertpost"]))
 {
@@ -330,34 +351,64 @@ else if(!$textpost)
 		{
 			echo "class='paidpost' ";
 		}
-		echo "href='?id=" . $post[0] . "'>";
+		echo "href='?id=" . htmlspecialchars($post[0]) . "'>";
 		if($post[7])
 		{
 			echo "[PAID] ";
 		}
-		echo $post[1] . "</a></h3>";
-		echo "<video controls name='media' preload='none' class='lazy videostags' data-poster='" . $post[6] . "'>";
-		echo "<source src='" . $post[5] . "' type='video/mp4'>";
+		echo htmlspecialchars($post[1]) . "</a></h3>";
+		echo "<video controls name='media' preload='none' class='lazy videostags' data-poster='" . htmlspecialchars($post[6]) . "'>";
+		echo "<source src='" . htmlspecialchars($post[5]) . "' type='video/mp4'>";
 		echo "</video>";
 		echo "<div class='hfiller20px'>";
 		echo "</div>";
 		echo "<div class='horizontal_line'>";
 		echo "</div>";
 		echo "<div class='subtext'>";
-		echo "<div>Posted by " . $post[3] . " at " . $post[4] . ".</div>";
-		echo "<div>Tags: " . $post[2] . "</div>";
+		echo "<div>Posted by " . htmlspecialchars($post[3]) . " at " . htmlspecialchars($post[4]) . ".</div>";
+		echo "<div>Tags: " . htmlspecialchars($post[2]) . "</div>";
 		echo "</div>";
 		if($showadminui)
 		{
 			echo "<div style='display:flex;'>";
-			echo "<form action='index.php' method='get'>";
-			echo "<input type='hidden' name='id' value='" . $post[0] . "'>";
-			echo "<input type='submit' class='button' name='postedit' value='Edit'>";
-			echo "</form>";
-			echo "<form action='index.php' method='post' onsubmit=\"return confirm('Are you sure you want to delete this post?')\">";
-			echo "<input type='hidden' name='postdelete_id' value='" . $post[0] . "'>";
-			echo "<input type='submit' class='button marginleft' name='postdelete' value='Delete'>";
-			echo "</form>";
+			$continue = false;
+			if(isadmin(2))
+			{
+				$continue = true;
+				if(!isadmin(8))
+				{
+					if($post[3] != $_COOKIE["user"])
+					{
+						$continue = false;
+					}
+				}
+			}
+			if($continue)
+			{
+				echo "<form action='index.php' method='get'>";
+				echo "<input type='hidden' name='id' value='" . htmlspecialchars($post[0]) . "'>";
+				echo "<input type='submit' class='button' name='postedit' value='Edit'>";
+				echo "</form>";
+			}
+			$continue = false;
+			if(isadmin(4))
+			{
+				$continue = true;
+				if(!isadmin(16))
+				{
+					if($post[3] != $_COOKIE["user"])
+					{
+						$continue = false;
+					}
+				}
+			}
+			if($continue)
+			{
+				echo "<form action='index.php' method='post' onsubmit=\"return confirm('Are you sure you want to delete this post?')\">";
+				echo "<input type='hidden' name='postdelete_id' value='" . htmlspecialchars($post[0]) . "'>";
+				echo "<input type='submit' class='button marginleft' name='postdelete' value='Delete'>";
+				echo "</form>";
+			}
 			echo "</div>";
 		}
 		echo "</div>";

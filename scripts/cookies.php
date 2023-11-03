@@ -54,6 +54,7 @@
 		$query = "SELECT * FROM admins WHERE username = ?";
 		$res = mysqli_execute_query($db, $query, [$_POST["user"]]);
 		$res = mysqli_fetch_array($res);
+		$loginsuccessful = false;
 		if($res)
 		{
 			$pres = password_verify($_POST["password"], $res[1]);
@@ -65,6 +66,8 @@
 				$adminusername = $_POST["user"];
 				$showadminui = true;
 				$isauth = true;
+				$loginsuccessful = true;
+				header("refresh: 2;");
 			}
 		}
 		mysqli_close($db);

@@ -77,7 +77,7 @@
 		echo "</form>";
 		echo "</div>";
 	}
-	if($showadminui)
+	if(isadmin(1))
 	{
 		echo "<form action='index.php' method='post'>";
 		echo "<input type='submit' name='insertpost' class='button' value='Add post'>";
@@ -146,7 +146,19 @@
 	echo "<h3 class='gadgets_top_text'>Admin login</h3>";
 	if($showadminui)
 	{
-		echo "<div>Authenticated as " . htmlspecialchars($adminusername) . ".</div>";
+		echo "<div>Authenticated as " . htmlspecialchars($adminusername) . ". Your permissions:</div>";
+		echo "<div><ul>";
+		if(isadmin(1))
+			echo "<li>Insert posts</li>";
+		if(isadmin(2))
+			echo "<li>Edit own posts</li>";
+		if(isadmin(4))
+			echo "<li>Delete own posts</li>";
+		if(isadmin(8))
+			echo "<li>Edit any post</li>";
+		if(isadmin(16))
+			echo "<li>Delete any post</li>";
+		echo "</ul></div>";
 		echo "<form action='index.php' method='post'>";
 		echo "<input type='hidden' name='logout'>";
 		echo "<input type='submit' class='button' value='Log out'>";
