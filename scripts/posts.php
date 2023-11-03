@@ -172,33 +172,122 @@ if($issearch)
 if(isset($postdeletesuccess))
 {
 	echo "<div class='searchquerytext'>";
-	echo "Post deleted successfully.";
+	switch($postdeletesuccess)
+	{
+		case 0:
+		{
+			echo "Post deleted successfully.";
+			break;
+		}
+		case 1:
+		{
+			echo "Failure deleting post. Your account can only delete your own posts.";
+			break;
+		}
+		case 2:
+		{
+			echo "Your account doesn't have permission to delete posts.";
+			break;
+		}
+	}
 	echo "</div>";
+	
 }
 
 if(isset($posteditsuccess))
 {
 	echo "<div class='searchquerytext'>";
-	echo "Post edited successfully.";
+	if($posteditsuccess)
+	{
+		echo "Post edited successfully.";
+	}
+	else
+	{
+		echo "Failure editing post. Your account can only edit your own posts.";
+	}
 	echo "</div>";
 }
 
 if($ispost && isset($_GET["postedit"]))
 {
-	if(!isadmin())
+	$nopost = false;
+	if(!isadmin(2) && !isadmin(8))
 	{
-		die("Not an admin.");
+		echo "Your account does not have permission to edit posts.";
 	}
-	$res = mysqli_fetch_array($res);
-	if($res)
+	else
 	{
-		$nopost = false;
+		$res = mysqli_fetch_array($res);
+		if($res)
+		{
+			$continue = true;
+			if(!isadmin(8))
+			{
+				if($res[3] != $_COOKIE["user"])
+				{
+					$continue = false;
+					echo "Your account can only edit your own posts.";
+				}
+			}
+			if($continue)
+			{
+				echo "<div class='post'>";
+				echo "<div class='subtext'>";
+				echo "Editing post " . $res[1] . ":";
+				echo "</div>";
+				echo "<form action='index.php' method='post'>";
+				echo "<input type='hidden' name='edit_id' value='" . $res[0] . "'>";
+				echo "<table class='tableedit'>";
+				echo "<tr>";
+					echo "<th class='rowedit headerrowtable'>Parameter</th>";
+					echo "<th class='rowedit'>Value</th>";
+				echo "</tr>";
+				echo "<tr>";
+					echo "<td class='rowedit parameter'>Title</td>";
+					echo "<td class='rowedit'><textarea maxlength='80' class='textfield editfield' name='edit_title'>" . $res[1] . "</textarea></td>";
+				echo "</tr>";
+				echo "<tr>";
+					echo "<td class='rowedit parameter'>Tags</td>";
+					echo "<td class='rowedit'><textarea maxlength='80' class='textfield editfield' name='edit_tags'>" . $res[2] . "</textarea></td>";
+				echo "</tr>";
+				echo "<tr>";
+					echo "<td class='rowedit parameter'>Video url</td>";
+					echo "<td class='rowedit'><textarea maxlength='256' class='textfield editfield' name='edit_videourl'>" . $res[5] . "</textarea></td>";
+				echo "</tr>";
+				echo "<tr>";
+					echo "<td class='rowedit parameter'>Thumbnail url</td>";
+					echo "<td class='rowedit'><textarea maxlength='256' class='textfield editfield' name='edit_imageurl'>" . $res[6] . "</textarea></td>";
+				echo "</tr>";
+				echo "<tr>";
+					echo "<td class='rowedit parameter'>Is paid</td>";
+					echo "<td class='rowedit'><input type='checkbox' name='edit_ispaid' ";
+					if($res[7])
+					{
+						echo "checked='checked'";
+					}
+					echo "'></td>";
+				echo "</tr>";
+				echo "</table>";
+				echo "<input type='submit' class='button' value='Save changes'>";
+				echo "</form>";
+				echo "</div>";
+			}
+		}
+	}
+}
+else if(isset($_POST["insertpost"]))
+{
+	if(!isadmin(1))
+	{
+		echo "Your account doesn't have permission to insert posts.";
+	}
+	else
+	{
 		echo "<div class='post'>";
 		echo "<div class='subtext'>";
-		echo "Editing post " . $res[1] . ":";
+		echo "Adding a post:";
 		echo "</div>";
 		echo "<form action='index.php' method='post'>";
-		echo "<input type='hidden' name='edit_id' value='" . $res[0] . "'>";
 		echo "<table class='tableedit'>";
 		echo "<tr>";
 			echo "<th class='rowedit headerrowtable'>Parameter</th>";
@@ -206,75 +295,29 @@ if($ispost && isset($_GET["postedit"]))
 		echo "</tr>";
 		echo "<tr>";
 			echo "<td class='rowedit parameter'>Title</td>";
-			echo "<td class='rowedit'><textarea maxlength='80' class='textfield editfield' name='edit_title'>" . $res[1] . "</textarea></td>";
+			echo "<td class='rowedit'><textarea maxlength='80' class='textfield editfield' name='insert_title'></textarea></td>";
 		echo "</tr>";
 		echo "<tr>";
 			echo "<td class='rowedit parameter'>Tags</td>";
-			echo "<td class='rowedit'><textarea maxlength='80' class='textfield editfield' name='edit_tags'>" . $res[2] . "</textarea></td>";
+			echo "<td class='rowedit'><textarea maxlength='80' class='textfield editfield' name='insert_tags'></textarea></td>";
 		echo "</tr>";
 		echo "<tr>";
 			echo "<td class='rowedit parameter'>Video url</td>";
-			echo "<td class='rowedit'><textarea maxlength='256' class='textfield editfield' name='edit_videourl'>" . $res[5] . "</textarea></td>";
+			echo "<td class='rowedit'><textarea maxlength='256' class='textfield editfield' name='insert_videourl'></textarea></td>";
 		echo "</tr>";
 		echo "<tr>";
 			echo "<td class='rowedit parameter'>Thumbnail url</td>";
-			echo "<td class='rowedit'><textarea maxlength='256' class='textfield editfield' name='edit_imageurl'>" . $res[6] . "</textarea></td>";
+			echo "<td class='rowedit'><textarea maxlength='256' class='textfield editfield' name='insert_imageurl'></textarea></td>";
 		echo "</tr>";
 		echo "<tr>";
 			echo "<td class='rowedit parameter'>Is paid</td>";
-			echo "<td class='rowedit'><input type='checkbox' name='edit_ispaid' ";
-			if($res[7])
-			{
-				echo "checked='checked'";
-			}
-			echo "'></td>";
+			echo "<td class='rowedit'><input type='checkbox' name='insert_ispaid'></td>";
 		echo "</tr>";
 		echo "</table>";
-		echo "<input type='submit' class='button' value='Save changes'>";
+		echo "<input type='submit' class='button' value='Submit post'>";
 		echo "</form>";
 		echo "</div>";
 	}
-}
-else if(isset($_POST["insertpost"]))
-{
-	if(!isadmin())
-	{
-		die("Not an admin.");
-	}
-	echo "<div class='post'>";
-	echo "<div class='subtext'>";
-	echo "Adding a post:";
-	echo "</div>";
-	echo "<form action='index.php' method='post'>";
-	echo "<table class='tableedit'>";
-	echo "<tr>";
-		echo "<th class='rowedit headerrowtable'>Parameter</th>";
-		echo "<th class='rowedit'>Value</th>";
-	echo "</tr>";
-	echo "<tr>";
-		echo "<td class='rowedit parameter'>Title</td>";
-		echo "<td class='rowedit'><textarea maxlength='80' class='textfield editfield' name='insert_title'></textarea></td>";
-	echo "</tr>";
-	echo "<tr>";
-		echo "<td class='rowedit parameter'>Tags</td>";
-		echo "<td class='rowedit'><textarea maxlength='80' class='textfield editfield' name='insert_tags'></textarea></td>";
-	echo "</tr>";
-	echo "<tr>";
-		echo "<td class='rowedit parameter'>Video url</td>";
-		echo "<td class='rowedit'><textarea maxlength='256' class='textfield editfield' name='insert_videourl'></textarea></td>";
-	echo "</tr>";
-	echo "<tr>";
-		echo "<td class='rowedit parameter'>Thumbnail url</td>";
-		echo "<td class='rowedit'><textarea maxlength='256' class='textfield editfield' name='insert_imageurl'></textarea></td>";
-	echo "</tr>";
-	echo "<tr>";
-		echo "<td class='rowedit parameter'>Is paid</td>";
-		echo "<td class='rowedit'><input type='checkbox' name='insert_ispaid'></td>";
-	echo "</tr>";
-	echo "</table>";
-	echo "<input type='submit' class='button' value='Submit post'>";
-	echo "</form>";
-	echo "</div>";
 }
 else if(!$textpost)
 {

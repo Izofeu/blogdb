@@ -1,7 +1,8 @@
 <?php
-	if(!isadmin())
+	if(!isadmin(1))
 	{
-		die("Not an admin.");
+		$postinsertsuccess = false;
+		return;
 	}
 	# 0 - id
 	# 1 - title

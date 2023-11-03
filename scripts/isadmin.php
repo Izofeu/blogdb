@@ -1,5 +1,11 @@
 <?php
-	function isadmin()
+	// permlevels:
+	// 1 - insert posts
+	// 2 - edit own posts
+	// 4 - delete own posts
+	// 8 - edit all posts
+	// 16 - delete all posts
+	function isadmin($permlevel)
 	{
 		if(isset($_COOKIE["user"]) && isset($_COOKIE["password"]))
 		{
@@ -13,7 +19,7 @@
 				$pres = $_COOKIE["password"] == $res[1];
 				if($pres)
 				{
-					return true;
+					return $permlevel & $res[2];
 				}
 			}
 		}
