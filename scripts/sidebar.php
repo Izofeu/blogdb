@@ -147,6 +147,7 @@
 	if($showadminui)
 	{
 		echo "<div>Authenticated as " . htmlspecialchars($adminusername) . ". Your permissions:</div>";
+		// List permissions of a user
 		echo "<div><ul>";
 		if(isadmin(1))
 			echo "<li>Insert posts</li>";

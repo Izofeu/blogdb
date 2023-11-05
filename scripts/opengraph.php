@@ -47,6 +47,7 @@ if($ispost && !$textpost)
 		echo "<meta property='og:url' content='https://" . $domain . "/index.php?id=" . $res[0] . "'>";
 		echo "<meta property='og:description' content='A frontend for watching Nutsuki&#39;s videos. This video has the following tags: " . $res[2] . ".'>";
 		echo "<meta property='description' content='A frontend for watching Nutsuki&#39;s videos. This video has the following tags: " . $res[2] . ".'>";
+		echo "<title>" . $res[1] . " (" . $res[0] . ") - " . $pagename . "</title>";
 	}
 }
 else if($textpost)
@@ -59,6 +60,7 @@ else if($textpost)
 		echo "<meta property='og:url' content='https://" . $domain . "/index.php?textpost&id=" . $res[0] . "'>";
 		echo "<meta property='og:description' content='A frontend for watching Nutsuki&#39;s videos.'>";
 		echo "<meta property='description' content='A frontend for watching Nutsuki&#39;s videos.'>";
+		echo "<title>" . $res[2] . " - " . $pagename . "</title>";
 	}
 }
 else
@@ -67,6 +69,7 @@ else
 	echo "<meta property='og:url' content='https://" . $domain . "'>";
 	echo "<meta property='og:description' content='A frontend for watching Nutsuki&#39;s videos.'>";
 	echo "<meta property='description' content='A frontend for watching Nutsuki&#39;s videos.'>";
+	echo "<title>" . $pagename . "</title>";
 }
 
 mysqli_close($db)

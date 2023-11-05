@@ -1,6 +1,7 @@
 <?php
 // This file contains default configuration
 $domain = "nutsuki.fun";
+$pagename = "Nutsuki Suu's videos";
 $timezone = "Europe/Warsaw";
 $db_username = "pyth";
 $db_url = "127.0.0.1";

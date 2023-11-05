@@ -1,6 +1,4 @@
 <?php
-	$domain = "nutsuki.fun";
-	
 	# Cookie notice cookie
 	if(isset($_COOKIE["cookienoticeviewed"]))
 	{
@@ -12,6 +10,7 @@
 	$auth = fread($authfile, filesize("scripts/auth.pwd"));
 	fclose($authfile);
 	
+	// Is the user trying to authenticate for paid posts?
 	if(isset($_POST["auth"]))
 	{
 		$authsuccessful = false;
@@ -22,11 +21,15 @@
 			setcookie("auth", $auth, time() + (86400 * 7), "/", $domain, false, true);
 		}
 	}
+	// If the user is not trying to authenticate for paid posts, do they have a paid posts cookie set?
 	else if(isset($_COOKIE["auth"]))
 	{
+		// Validate the cookie
 		if($_COOKIE["auth"] == $auth)
 		{
+			// Set user as authenticated
 			$isauth = true;
+			// Refresh the cookie
 			setcookie("auth", $auth, time() + (86400 * 7), "/", $domain, false, true);
 		}
 	}

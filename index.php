@@ -45,7 +45,6 @@
 	?>
 	
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-	<title>Nutsuki suu's videos</title>
 </head>
 <body class="bg_dark font">
 	<script src="scripts.js">

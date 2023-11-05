@@ -20,6 +20,7 @@
 				return;
 			}
 		}
+		$postdeletesuccess = 3;
 	}
 	$query = "DELETE FROM posts WHERE id = ?";
 	mysqli_execute_query($db, $query, [$_POST["postdelete_id"]]);

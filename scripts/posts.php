@@ -26,6 +26,8 @@ if(isset($_GET["page"]))
 $postcount = 20;
 
 // Setting default variables, do NOT edit these
+
+// This variable is responsible for displaying No posts found notice.
 $nopost = true;
 $issearch = false;
 $ispost = false;
@@ -150,7 +152,7 @@ else
 # 6 - imageurl
 # 7 - ispaid
 
-// Print retrieved posts
+// Print retrieved posts query text
 if($issearch)
 {
 	echo "<div class='searchquerytext'>";
@@ -169,24 +171,33 @@ if($issearch)
 	echo "</div>";
 }
 
+// Did the user try to delete a post?
 if(isset($postdeletesuccess))
 {
 	echo "<div class='searchquerytext'>";
 	switch($postdeletesuccess)
 	{
+		// 0 - Successful deletion (doesn't guarantee the database has been altered, only guarantees user had permission to attempt it)
 		case 0:
 		{
 			echo "Post deleted successfully.";
 			break;
 		}
+		// 1 - Account can only delete its own posts
 		case 1:
 		{
 			echo "Failure deleting post. Your account can only delete your own posts.";
 			break;
 		}
+		// 2 - Account cannot delete posts at all
 		case 2:
 		{
 			echo "Your account doesn't have permission to delete posts.";
+			break;
+		}
+		case 3:
+		{
+			echo "Post does not exist.";
 			break;
 		}
 	}
@@ -194,6 +205,7 @@ if(isset($postdeletesuccess))
 	
 }
 
+// Did the user try to edit a post?
 if(isset($posteditsuccess))
 {
 	echo "<div class='searchquerytext'>";
@@ -208,6 +220,7 @@ if(isset($posteditsuccess))
 	echo "</div>";
 }
 
+// Has the user successfully inserted a post?
 if(isset($postinsertsuccess))
 {
 	echo "<div class='searchquerytext'>";
@@ -215,9 +228,12 @@ if(isset($postinsertsuccess))
 	echo "</div>";
 }
 
-if($ispost && isset($_GET["postedit"]))
+// Is user trying to edit a valid post?
+if($ispost && isset($_GET["postedit"]) && !$textpost)
 {
+	// Mark the page as containing a post
 	$nopost = false;
+	// Check if user can edit posts at all
 	if(!isadmin(2) && !isadmin(8))
 	{
 		echo "Your account does not have permission to edit posts.";
@@ -227,15 +243,18 @@ if($ispost && isset($_GET["postedit"]))
 		$res = mysqli_fetch_array($res);
 		if($res)
 		{
+			// Continue flag
 			$continue = true;
 			if(!isadmin(8))
 			{
 				if($res[3] != $_COOKIE["user"])
 				{
+					// Refuse continuation of this if, if the user doesn't have the required permission
 					$continue = false;
 					echo "Your account can only edit your own posts.";
 				}
 			}
+			// Only continue if user has the required permission
 			if($continue)
 			{
 				echo "<div class='post'>";
@@ -282,9 +301,11 @@ if($ispost && isset($_GET["postedit"]))
 		}
 	}
 }
+// If the user is not trying to edit a valid post, did they log in?
 else if(isset($loginsuccessful))
 {
 	echo "<div class='searchquerytext'>";
+	// User tried to log in, disable the no posts found notice
 	$nopost = false;
 	if($loginsuccessful)
 	{
@@ -295,9 +316,10 @@ else if(isset($loginsuccessful))
 		echo "Invalid credentials.";
 	}
 	echo "</div>";
-}
+}// If the user hasn't tried to log in, are they trying to insert a post?
 else if(isset($_POST["insertpost"]))
 {
+	$nopost = false;
 	if(!isadmin(1))
 	{
 		echo "Your account doesn't have permission to insert posts.";
@@ -340,11 +362,15 @@ else if(isset($_POST["insertpost"]))
 		echo "</div>";
 	}
 }
+// If the user isn't trying to insert a post, are they trying to display a text post?
 else if(!$textpost)
 {
+	// User isn't trying to display a text post, display all posts that match the user's search criteria and/or page (if provided).
 	while($post = mysqli_fetch_array($res))
 	{
+		// At least one post was found, disable the no posts found notice
 		$nopost = false;
+		// Display the posts
 		echo "<div class='post'>";
 		echo "<h3><a ";
 		if($post[7])
@@ -371,18 +397,25 @@ else if(!$textpost)
 		if($showadminui)
 		{
 			echo "<div style='display:flex;'>";
+			// Continue flag for an incoming if
 			$continue = false;
+			// Check if user has permission to edit own posts
 			if(isadmin(2))
 			{
+				// User has permission to edit own posts, allow continuing
 				$continue = true;
+				// Can user edit all posts? If yes, ignore the name check, if no, check if the uploader's name matches the account name
 				if(!isadmin(8))
 				{
 					if($post[3] != $_COOKIE["user"])
 					{
+						// Uploader name does not match the account name, disallow continuing
 						$continue = false;
 					}
 				}
 			}
+			// Is the user allowed to edit this post, following the previous permission checks?
+			// If so, print the edit button under the post.
 			if($continue)
 			{
 				echo "<form action='index.php' method='get'>";
@@ -390,18 +423,25 @@ else if(!$textpost)
 				echo "<input type='submit' class='button' name='postedit' value='Edit'>";
 				echo "</form>";
 			}
+			// Continue flag for an incoming if
 			$continue = false;
+			// Check if user has permission to delete own posts
 			if(isadmin(4))
 			{
+				// User has permission to delete own posts, allow continuing
 				$continue = true;
+				// Can user delete all posts? If yes, ignore the name check, if no, check if the uploader's name matches the account name
 				if(!isadmin(16))
 				{
 					if($post[3] != $_COOKIE["user"])
 					{
+						// Uploader name does not match the account name, disallow continuing
 						$continue = false;
 					}
 				}
 			}
+			// Is the user allowed to delete this post, following the previous permission checks?
+			// If so, print the delete button under the post.
 			if($continue)
 			{
 				echo "<form action='index.php' method='post' onsubmit=\"return confirm('Are you sure you want to delete this post?')\">";
@@ -414,11 +454,13 @@ else if(!$textpost)
 		echo "</div>";
 	}
 }
+// This code gets executed if user is trying to view a text post
 else
 {
 	$post = mysqli_fetch_array($res);
 	if($post)
 	{
+		// The text post the user is trying to view exists, disable the no posts found notice
 		$nopost = false;
 		echo "<div class='post'>";
 		echo "<h3>" . $post[2] . "</h3>";
@@ -426,8 +468,8 @@ else
 		echo "</div>";
 	}
 }
-
-if($nopost && !isset($_POST["insertpost"]))
+// Display this notice if no valid posts were found
+if($nopost)
 {
 	echo "<div class='post'>";
 	echo "<h3>No results</h3>";
@@ -437,7 +479,7 @@ if($nopost && !isset($_POST["insertpost"]))
 	echo "</div>";
 }
 
-// Count results and display Page x of y if user isn't browsing a single post
+// Count results and display Page x of y if user isn't browsing a single post and isn't trying to insert a post
 if(!$ispost && !isset($_POST["insertpost"]) && !$nopost)
 {
 	// Count query for proper displaying of Page x of y
