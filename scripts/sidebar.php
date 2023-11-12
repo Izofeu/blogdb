@@ -72,7 +72,7 @@
 		}
 	}
 	echo "Paid content " . $authtext . ".</div>";
-	if(!$isauth)
+	if(!$showadminui)
 	{
 		echo "<div>";
 		echo "<form action='index.php' method='post'>";

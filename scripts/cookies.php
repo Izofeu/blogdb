@@ -8,14 +8,14 @@
 	$isauth = false;
 	// Two ifs above check if user has either a cookie set or a post value set
 	// This value is used in a query to determine if the cookie exists and hasn't expired yet
-	if(isset($_COOKIE["auth"]))
-	{
-		$toquery = $_COOKIE["auth"];
-	}
-	else if(isset($_POST["auth"]))
+	if(isset($_POST["auth"]))
 	{
 		$toquery = $_POST["auth"];
 		$authsuccessful = false;
+	}
+	else if(isset($_COOKIE["auth"]))
+	{
+		$toquery = $_COOKIE["auth"];
 	}
 	// The user is trying to authenticate to view paid posts
 	if(isset($toquery))
