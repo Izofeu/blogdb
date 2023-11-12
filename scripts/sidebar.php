@@ -48,6 +48,10 @@
 	if($isauth)
 	{
 		$authtext = "shown";
+		if(!$showadminui)
+		{
+			$authtext = $authtext . ". Permission expires at " . $cookieexpires . " " . date('T');
+		}
 	}
 	else
 	{

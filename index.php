@@ -2,8 +2,8 @@
 	// ob_start(null,);
 	require("scripts/config.php");
 	require("scripts/db_open.php");
-	require("scripts/cookies.php");
 	require("scripts/isadmin.php");
+	require("scripts/cookies.php");
 ?>
 <!DOCTYPE html>
 <html lang="en-US">

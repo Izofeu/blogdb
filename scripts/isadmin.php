@@ -11,6 +11,9 @@
 	// isadmin is a safe function, meaning you can rely on its return value that
 	// the user has permissions
 	
+	// Calling this function with 0 as argument will return true if user is in database
+	// regardless of permissions
+	
 	$db = db_open();
 	$query = "SELECT * FROM admins";
 	$res = mysqli_query($db, $query);
@@ -21,6 +24,10 @@
 	{
 		global $rowres;
 		$res = $rowres;
+		if(isset($_POST["logout"]))
+		{
+			return false;
+		}
 		if(isset($_COOKIE["user"]) && isset($_COOKIE["password"]))
 		{
 			//mysqli_data_seek($res, 0);
@@ -31,6 +38,10 @@
 					$pres = $_COOKIE["password"] == $resarr[1];
 					if($pres)
 					{
+						if($permlevel == 0)
+						{
+							return true;
+						}
 						return $permlevel & $resarr[2];
 					}
 					return false;
