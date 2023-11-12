@@ -286,7 +286,7 @@ if($ispost && isset($_GET["postedit"]) && !$textpost)
 				echo "</tr>";
 				echo "<tr>";
 					echo "<td class='rowedit parameter'>Is paid</td>";
-					echo "<td class='rowedit'><input type='checkbox' name='edit_ispaid' ";
+					echo "<td class='rowedit'><input type='checkbox' class='checkbox' name='edit_ispaid' ";
 					if($res[7])
 					{
 						echo "checked='checked'";
@@ -354,7 +354,7 @@ else if(isset($_POST["insertpost"]))
 		echo "</tr>";
 		echo "<tr>";
 			echo "<td class='rowedit parameter'>Is paid</td>";
-			echo "<td class='rowedit'><input type='checkbox' name='insert_ispaid'></td>";
+			echo "<td class='rowedit'><input type='checkbox' class='checkbox' name='insert_ispaid'></td>";
 		echo "</tr>";
 		echo "</table>";
 		echo "<input type='submit' class='button' value='Submit post'>";

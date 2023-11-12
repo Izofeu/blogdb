@@ -407,6 +407,12 @@ textarea
 	font-weight: bold;
 }
 
+.checkbox
+{
+	width: 20px;
+	height: 20px;
+}
+
 @media only screen and (min-width: 1817px)
 {
 	.top_container
