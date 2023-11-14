@@ -307,6 +307,7 @@ else if(isset($loginsuccessful))
 	echo "<div class='searchquerytext'>";
 	// User tried to log in, disable the no posts found notice
 	$nopost = false;
+	$ispost = true;
 	if($loginsuccessful)
 	{
 		echo "Welcome back, " . htmlspecialchars($_POST["user"]) . ". Refreshing in 2 seconds..";
@@ -319,6 +320,7 @@ else if(isset($loginsuccessful))
 }// If the user hasn't tried to log in, are they trying to insert a post?
 else if(isset($_POST["insertpost"]))
 {
+	$ispost = true;
 	$nopost = false;
 	if(!isadmin(1))
 	{
@@ -366,8 +368,10 @@ else if(isset($_POST["insertpost"]))
 else if(!$textpost)
 {
 	// User isn't trying to display a text post, display all posts that match the user's search criteria and/or page (if provided).
+	$ispost = true;
 	while($post = mysqli_fetch_array($res))
 	{
+		$ispost = false;
 		// At least one post was found, disable the no posts found notice
 		$nopost = false;
 		// Display the posts
@@ -480,7 +484,7 @@ if($nopost)
 }
 
 // Count results and display Page x of y if user isn't browsing a single post and isn't trying to insert a post
-if(!$ispost && !isset($_POST["insertpost"]) && !$nopost)
+if(!$ispost)
 {
 	// Count query for proper displaying of Page x of y
 	$query = "SELECT COUNT(id) FROM posts WHERE ispaid = 0";
