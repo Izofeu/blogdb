@@ -171,61 +171,10 @@ if($issearch)
 	echo "</div>";
 }
 
-// Did the user try to delete a post?
-if(isset($postdeletesuccess))
+// If user tried to edit / delete / insert a post, include a notice script to print appropriate message
+if(isset($postdeletesuccess) || isset($posteditsuccess) || isset($postinsertsuccess))
 {
-	echo "<div class='searchquerytext'>";
-	switch($postdeletesuccess)
-	{
-		// 0 - Successful deletion (doesn't guarantee the database has been altered, only guarantees user had permission to attempt it)
-		case 0:
-		{
-			echo "Post deleted successfully.";
-			break;
-		}
-		// 1 - Account can only delete its own posts
-		case 1:
-		{
-			echo "Failure deleting post. Your account can only delete your own posts.";
-			break;
-		}
-		// 2 - Account cannot delete posts at all
-		case 2:
-		{
-			echo "Your account doesn't have permission to delete posts.";
-			break;
-		}
-		case 3:
-		{
-			echo "Post does not exist.";
-			break;
-		}
-	}
-	echo "</div>";
-	
-}
-
-// Did the user try to edit a post?
-if(isset($posteditsuccess))
-{
-	echo "<div class='searchquerytext'>";
-	if($posteditsuccess)
-	{
-		echo "Post edited successfully.";
-	}
-	else
-	{
-		echo "Failure editing post. Your account can only edit your own posts.";
-	}
-	echo "</div>";
-}
-
-// Has the user successfully inserted a post?
-if(isset($postinsertsuccess))
-{
-	echo "<div class='searchquerytext'>";
-	echo "Post added successfully.";
-	echo "</div>";
+	require("scripts/adminactionnotice.php");
 }
 
 // Is user trying to edit a valid post?
@@ -368,10 +317,8 @@ else if(isset($_POST["insertpost"]))
 else if(!$textpost)
 {
 	// User isn't trying to display a text post, display all posts that match the user's search criteria and/or page (if provided).
-	$ispost = true;
 	while($post = mysqli_fetch_array($res))
 	{
-		$ispost = false;
 		// At least one post was found, disable the no posts found notice
 		$nopost = false;
 		// Display the posts
@@ -484,7 +431,7 @@ if($nopost)
 }
 
 // Count results and display Page x of y if user isn't browsing a single post and isn't trying to insert a post
-if(!$ispost)
+else if(!$ispost)
 {
 	// Count query for proper displaying of Page x of y
 	$query = "SELECT COUNT(id) FROM posts WHERE ispaid = 0";
