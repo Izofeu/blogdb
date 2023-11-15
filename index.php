@@ -20,8 +20,9 @@
 	<meta content="adult" name="rating">
 	<meta content='website' property='og:type'>
 	<meta content='en_US' property='og:locale'>
+	<link rel='stylesheet' href='styles.css' type='text/css'>
 	<?php
-		require("scripts/opengraph.php");
+		require("scripts/opengraph.php");/*
 		if(isset($_GET["id"]) || isset($_POST["insertpost"]))
 		{
 			echo "<link rel='stylesheet' href='styles_noexpand.css' type='text/css'>";
@@ -29,7 +30,7 @@
 		else
 		{
 			echo "<link rel='stylesheet' href='styles.css' type='text/css'>";
-		}
+		}*/
 		if(isset($_POST["postdelete_id"]))
 		{
 			require("scripts/deletepost.php");

@@ -26,7 +26,6 @@ if(isset($_GET["page"]))
 $postcount = 20;
 
 // Setting default variables, do NOT edit these
-
 // This variable is responsible for displaying No posts found notice.
 $nopost = true;
 $issearch = false;
@@ -63,6 +62,17 @@ if(isset($_GET["id"]))
 				$query = "SELECT * FROM textposts WHERE id = " . $get_id;
 			}
 		}
+	}
+}
+
+// Is user trying to get a random post?
+else if(isset($_POST["random"]))
+{
+	$ispost = true;
+	$query = "SELECT * FROM posts WHERE ispaid = 0 ORDER BY RAND() LIMIT 1";
+	if($isauth)
+	{
+		$query = "SELECT * FROM posts ORDER BY RAND() LIMIT 1";
 	}
 }
 
@@ -206,7 +216,7 @@ if($ispost && isset($_GET["postedit"]) && !$textpost)
 			// Only continue if user has the required permission
 			if($continue)
 			{
-				echo "<div class='post'>";
+				echo "<div class='post_nocss'>";
 				echo "<div class='subtext'>";
 				echo "Editing post " . htmlspecialchars($res[1]) . ":";
 				echo "</div>";
@@ -266,7 +276,8 @@ else if(isset($loginsuccessful))
 		echo "Invalid credentials.";
 	}
 	echo "</div>";
-}// If the user hasn't tried to log in, are they trying to insert a post?
+}
+// If the user hasn't tried to log in, are they trying to insert a post?
 else if(isset($_POST["insertpost"]))
 {
 	$ispost = true;
@@ -277,7 +288,7 @@ else if(isset($_POST["insertpost"]))
 	}
 	else
 	{
-		echo "<div class='post'>";
+		echo "<div class='post_nocss'>";
 		echo "<div class='subtext'>";
 		echo "Adding a post:";
 		echo "</div>";
@@ -322,7 +333,12 @@ else if(!$textpost)
 		// At least one post was found, disable the no posts found notice
 		$nopost = false;
 		// Display the posts
-		echo "<div class='post'>";
+		echo "<div class='post";
+		if($ispost)
+		{
+			echo "_nocss";
+		}
+		echo "'>";
 		echo "<h3><a ";
 		if($post[7])
 		{
@@ -413,7 +429,7 @@ else
 	{
 		// The text post the user is trying to view exists, disable the no posts found notice
 		$nopost = false;
-		echo "<div class='post'>";
+		echo "<div class='post_nocss'>";
 		echo "<h3>" . $post[2] . "</h3>";
 		echo $post[1];
 		echo "</div>";
@@ -422,7 +438,7 @@ else
 // Display this notice if no valid posts were found
 if($nopost)
 {
-	echo "<div class='post'>";
+	echo "<div class='post_nocss'>";
 	echo "<h3>No results</h3>";
 	echo "<div class=''>";
 	echo "No content was found that matches the criteria. The post(s) either don't exist, or you don't have permission to view the content.";

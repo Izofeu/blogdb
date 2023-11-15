@@ -130,7 +130,7 @@ h2
 	font-size: 16px;
 }
 
-.post
+.post, .post_nocss
 {
 	width: 620px;
 	/*height: 620px;*/
@@ -415,7 +415,7 @@ textarea
 
 @media only screen and (min-width: 1817px)
 {
-	.top_container
+	.top_container:has(.post)
 	{
 		width: 1700px;
 	}
@@ -423,7 +423,7 @@ textarea
 
 @media only screen and (min-width: 2467px)
 {
-	.top_container
+	.top_container:has(.post)
 	{
 		width: 2350px;
 	}
@@ -431,7 +431,7 @@ textarea
 
 @media only screen and (min-width: 3117px)
 {
-	.top_container
+	.top_container:has(.post)
 	{
 		width: 3000px;
 	}
@@ -439,7 +439,7 @@ textarea
 
 @media only screen and (min-width: 3767px)
 {
-	.top_container
+	.top_container:has(.post)
 	{
 		width: 3650px;
 	}
@@ -447,7 +447,7 @@ textarea
 
 @media only screen and (min-width: 4417px)
 {
-	.top_container
+	.top_container:has(.post)
 	{
 		width: 4300px;
 	}

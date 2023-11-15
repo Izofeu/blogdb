@@ -42,6 +42,10 @@
 	echo "<input type='radio' class='radiobutton' id='searchbytags' name='searchtype' value='1'>";
 	echo "<label class='searchlabel' for='searchbytags'>By tags (separated by space)</label>";
 	echo "</form>";
+	echo "<form action='index.php' method='post'>";
+	echo "<input type='submit' class='button' value='Random post'>";
+	echo "<input type='hidden' name='random'>";
+	echo "</form>";
 	echo "</div>";
 	
 	# Authentication
