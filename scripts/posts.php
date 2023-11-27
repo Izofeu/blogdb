@@ -33,6 +33,8 @@ $ispost = false;
 $searchbytags = false;
 $searchbydate = false;
 $textpost = false;
+$negatesearch = false;
+$searchfailed = false;
 // Prepare default query to get posts
 $query = "SELECT * FROM posts WHERE ispaid = 0 ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
 // Default query if user is a paid user
@@ -77,108 +79,180 @@ else if(isset($_POST["random"]))
 	}
 }
 
-// Check if user is trying to search posts
+// Check if user is trying to perform a search action of any type
 else if(isset($_GET["searchquery"]))
 {
-	if($_GET["searchquery"] != "" || isset($_GET["search_fromdate"]))
+	// Is the search negated?
+	if(isset($_GET["negatesearch"]))
 	{
-		// User is in search mode, set flag to true
+		$negatesearch = true;
+	}
+	// Is the search action valid?
+	// A valid search action must contain a search type
+	// and either a non-empty search query or a date parameter
+	if(($_GET["searchquery"] != "" || isset($_GET["search_fromdate"])) && isset($_GET["searchtype"]))
+	{
+		// User is in general search mode, set flag to true
 		$issearch = true;
-		// Check if user is trying to search by tags instead
-		if(isset($_GET["searchtype"]))
+		// Is user trying to search by tags?
+		if($_GET["searchtype"] == 1)
 		{
-			if($_GET["searchtype"] == 1)
+			$searchbytags = true;
+			// Split user string into tags that can be queried
+			$querytags = explode(" ", $_GET["searchquery"]);
+			// Get count of tags
+			$querytagscount = sizeof($querytags);
+			// Add a percent sign before and after the query to get all SQL matches and prevent SQL injection
+			for($i=0; $i<$querytagscount; $i=$i+1)
 			{
-				// User is trying to search by tags
-				$searchbytags = true;
-				// Split user string into tags that can be queried
-				$querytags = explode(" ", $_GET["searchquery"]);
-				// Get count of tags
-				$querytagscount = sizeof($querytags);
-				// Add a percent sign before and after the query to get all SQL matches and prevent SQL injection
-				for($i=0; $i<$querytagscount; $i=$i+1)
-				{
-					$querytags[$i] = "%" . $querytags[$i] . "%";
-				}
-				// Kill the script if user tries to search too many tags
-				if($querytagscount > 5)
-				{
-					die("Too many tags.");
-				}
+				$querytags[$i] = "%" . $querytags[$i] . "%";
+			}
+			// Kill the script if user tries to search too many tags
+			$continue = true;
+			if($querytagscount > 5)
+			{
+				$continue = false;
+				$issearch = false;
+				$searchfailed = true;
+				$searchbytags = false;
+			}
+			if($continue)
+			{
 				// Default query
-				$query = "SELECT * FROM posts WHERE ispaid = 0 AND tags LIKE ?";
+				$query = "SELECT * FROM posts WHERE ispaid = 0 AND tags";
+				if($negatesearch)
+				{
+					$query = $query . " NOT LIKE ?";
+				}
+				else
+				{
+					$query = $query . " LIKE ?";
+				}
 				if($isauth)
 				{
-					$query = "SELECT * FROM posts WHERE tags LIKE ?";
+					$query = "SELECT * FROM posts WHERE tags";
+					if($negatesearch)
+					{
+						$query = $query . " NOT LIKE ?";
+					}
+					else
+					{
+						$query = $query . " LIKE ?";
+					}
 				}
 				// Alternate query, this is used to get count of posts for Page x out of y
-				$querycount = "SELECT COUNT(id) FROM posts WHERE ispaid = 0 AND tags LIKE ?";
+				$querycount = "SELECT COUNT(id) FROM posts WHERE ispaid = 0 AND tags";
+				if($negatesearch)
+				{
+					$querycount = $querycount . " NOT LIKE ?";
+				}
+				else
+				{
+					$querycount = $querycount . " LIKE ?";
+				}
 				if($isauth)
 				{
-					$querycount = "SELECT COUNT(id) FROM posts WHERE tags LIKE ?";
+					$querycount = "SELECT COUNT(id) FROM posts WHERE tags";
+					if($negatesearch)
+					{
+						$querycount = $querycount . " NOT LIKE ?";
+					}
+					else
+					{
+						$querycount = $querycount . " LIKE ?";
+					}
 				}
 				// Depending on user argument count, add enough 'AND tags' clauses
 				for($i=2; $i<=$querytagscount; $i=$i+1)
 				{
-					$query = $query . " AND tags LIKE ?";
-					$querycount = $querycount . " AND tags LIKE ?";
+					if($negatesearch)
+					{
+						$query = $query . " AND tags NOT LIKE ?";
+						$querycount = $querycount . " AND tags NOT LIKE ?";
+					}
+					else
+					{
+						$query = $query . " AND tags LIKE ?";
+						$querycount = $querycount . " AND tags LIKE ?";
+					}
 				}
-				// Get count of elements with tags, sanitized
-				$tagpostcount = mysqli_execute_query($db, $querycount, $querytags);
+				// Execute a query with count of found posts, sanitized
+				$searchpostcount = mysqli_execute_query($db, $querycount, $querytags);
 				// Prepare actual query
 				$query = $query . " ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
 			}
-			else if($_GET["searchtype"] == 2 && isset($_GET["search_fromdate"]) && isset($_GET["search_todate"]))
+		}
+		// Is user trying to search by date?
+		else if($_GET["searchtype"] == 2 && isset($_GET["search_fromdate"]) && isset($_GET["search_todate"]))
+		{
+			$continue = false;
+			// Make sure dates are semi-valid
+			if(strtotime($_GET["search_fromdate"]) && strtotime($_GET["search_todate"]))
 			{
-				$continue = false;
-				if(strtotime($_GET["search_fromdate"]) && strtotime($_GET["search_todate"]))
+				// Make sure dates follow the format of 0000-00-00
+				$regex = '/^\d{4}-\d{2}-\d{2}$/';
+				if(preg_match($regex, $_GET["search_fromdate"]) && preg_match($regex, $_GET["search_todate"]))
 				{
-					$regex = '/^\d{4}-\d{2}-\d{2}$/';
-					if(preg_match($regex, $_GET["search_fromdate"]) && preg_match($regex, $_GET["search_todate"]))
-					{
-						$continue = true;
-					}
-				}
-				if($continue)
-				{
-					$searchbydate = true;
-					$datefrom = $_GET["search_fromdate"] . " 00:00:00";
-					$dateto = $_GET["search_todate"] . " 23:59:59";
-					$querydate = [$datefrom, $dateto];
-					$query = "SELECT * FROM posts WHERE ispaid = 0 AND (date BETWEEN ? AND ?) ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
-					$querycount = "SELECT COUNT(id) FROM posts WHERE ispaid = 0 AND (date BETWEEN ? AND ?)";
-					if($isauth)
-					{
-						$query = "SELECT * FROM posts WHERE (date BETWEEN ? AND ?) ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
-						$querycount = "SELECT COUNT(id) FROM posts WHERE (date BETWEEN ? AND ?)";
-					}
-					$tagpostcount = mysqli_execute_query($db, $querycount, $querydate);
-				}
-				else
-				{
-					// Prepare default query to get posts
-					$query = "SELECT * FROM posts WHERE ispaid = 0 ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
-					// Default query if user is a paid user
-					if($isauth)
-					{
-						$query = "SELECT * FROM posts ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
-					}
-					$issearch = false;
+					// Both dates are valid, continue
+					$continue = true;
 				}
 			}
-			else
+			if($continue)
 			{
-				// Default search query
-				$query = "SELECT * FROM posts WHERE ispaid = 0 AND title LIKE ? ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+				// Set search by date mode
+				$searchbydate = true;
+				// Add time to the query as it's stored as datetime in the table
+				$datefrom = $_GET["search_fromdate"] . " 00:00:00";
+				$dateto = $_GET["search_todate"] . " 23:59:59";
+				// Prepare an array for mysqli_execute_query function
+				$querydate = [$datefrom, $dateto];
+				// Default query
+				$query = "SELECT * FROM posts WHERE ispaid = 0 AND (date BETWEEN ? AND ?) ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+				if($negatesearch)
+				{
+					$query = "SELECT * FROM posts WHERE ispaid = 0 AND (date NOT BETWEEN ? AND ?) ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+				}
+				// Alternate query, this is used to get count of posts for Page x out of y
+				$querycount = "SELECT COUNT(id) FROM posts WHERE ispaid = 0 AND (date BETWEEN ? AND ?)";
+				if($negatesearch)
+				{
+					$querycount = "SELECT COUNT(id) FROM posts WHERE ispaid = 0 AND (date NOT BETWEEN ? AND ?)";
+				}
 				if($isauth)
 				{
-					$query = "SELECT * FROM posts WHERE title LIKE ? ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+					$query = "SELECT * FROM posts WHERE (date BETWEEN ? AND ?) ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+					$querycount = "SELECT COUNT(id) FROM posts WHERE (date BETWEEN ? AND ?)";
+					if($negatesearch)
+					{
+						$query = "SELECT * FROM posts WHERE (date NOT BETWEEN ? AND ?) ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+						$querycount = "SELECT COUNT(id) FROM posts WHERE (date NOT BETWEEN ? AND ?)";
+					}
 				}
+				// Execute a query with count of found posts, sanitized
+				$searchpostcount = mysqli_execute_query($db, $querycount, $querydate);
+			}
+			// User inputted date is invalid, disable search mode and proceed with default query
+			else
+			{
+				$issearch = false;
 			}
 		}
+		// User is trying to search by title, prepare an appropriate query
 		else
 		{
-			$issearch = false;
+			$query = "SELECT * FROM posts WHERE ispaid = 0 AND title LIKE ? ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+			if($negatesearch)
+			{
+				$query = "SELECT * FROM posts WHERE ispaid = 0 AND title NOT LIKE ? ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+			}
+			if($isauth)
+			{
+				$query = "SELECT * FROM posts WHERE title LIKE ? ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+				if($negatesearch)
+				{
+					$query = "SELECT * FROM posts WHERE title NOT LIKE ? ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+				}
+			}
 		}
 	}
 }
@@ -189,12 +263,12 @@ if($issearch && !$searchbytags && !$searchbydate)
 	$res = mysqli_execute_query($db, $query, ["%" . $_GET["searchquery"] . "%"]);
 }
 // Execute this query if user is searching by tags
-else if($searchbytags)
+else if($searchbytags && $issearch)
 {
 	$res = mysqli_execute_query($db, $query, $querytags);
 }
 // Execute this query if user is searching by date
-else if($searchbydate)
+else if($searchbydate && $issearch)
 {
 	$res = mysqli_execute_query($db, $query, $querydate);
 }
@@ -213,18 +287,35 @@ else
 # 6 - imageurl
 # 7 - ispaid
 
-// Print retrieved posts query text
+if($searchfailed)
+{
+	echo "<div class='searchquerytext'>";
+	echo "Maximum of 5 tags allowed per search.";
+	echo "</div>";
+}
+
+// Print search query text
 if($issearch)
 {
 	echo "<div class='searchquerytext'>";
 	if($searchbydate)
 	{
-		echo "Searching: dates between " . htmlspecialchars($_GET["search_fromdate"]) . " and " . htmlspecialchars($_GET["search_todate"]) . ".";
+		echo "Searching: dates ";
+		if($negatesearch)
+		{
+			echo "not ";
+		}
+		echo "between " . htmlspecialchars($_GET["search_fromdate"]) . " and " . htmlspecialchars($_GET["search_todate"]) . ".";
 		echo "</div>";
 	}
 	else
 	{
-		echo "Searching: \"";
+		echo "Searching: ";
+		if($negatesearch)
+		{
+			echo "not ";
+		}
+		echo "\"";
 		echo htmlspecialchars($_GET["searchquery"]);
 		echo "\" by ";
 		if($searchbytags)
@@ -518,14 +609,22 @@ else if(!$ispost)
 	{
 		// Count query for proper displaying of Page x of y, if user is in search by title mode
 		$query = "SELECT COUNT(id) FROM posts WHERE ispaid = 0 AND title LIKE ?";
+		if($negatesearch)
+		{
+			$query = "SELECT COUNT(id) FROM posts WHERE ispaid = 0 AND title NOT LIKE ?";
+		}
 		if($isauth)
 		{
 			$query = "SELECT COUNT(id) FROM posts WHERE title LIKE ?";
+			if($negatesearch)
+			{
+				$query = "SELECT COUNT(id) FROM posts WHERE title NOT LIKE ?";
+			}
 		}
 		if($searchbytags || $searchbydate)
 		{
 			// If user is in search by tags mode, we already have a mysqli object so we do not need to query the database
-			$res = $tagpostcount;
+			$res = $searchpostcount;
 		}
 		else
 		{
@@ -563,6 +662,14 @@ else if(!$ispost)
 				echo "&searchtype=2&search_fromdate=" . htmlspecialchars($_GET["search_fromdate"])
 			. "&search_todate=" . htmlspecialchars($_GET["search_todate"]);
 			}
+			else
+			{
+				echo "&searchtype=0";
+			}
+			if($negatesearch)
+			{
+				echo "&negatesearch=on";
+			}
 		}
 		echo "'><< </a>";
 	}
@@ -585,6 +692,14 @@ else if(!$ispost)
 			{
 				echo "&searchtype=2&search_fromdate=" . htmlspecialchars($_GET["search_fromdate"])
 			. "&search_todate=" . htmlspecialchars($_GET["search_todate"]);
+			}
+			else
+			{
+				echo "&searchtype=0";
+			}
+			if($negatesearch)
+			{
+				echo "&negatesearch=on";
 			}
 		}
 		echo "'> >></a>";
