@@ -35,12 +35,17 @@
 	echo "<div class='searchbar gadgets'>";
 	echo "<h3 class='gadgets_top_text'>Search for...</h3>";
 	echo "<form action='index.php' method='get'>";
-	echo "<input type='text' name='searchquery' class='searchbox textfield'>";
+	echo "<input type='text' id='searchquery' name='searchquery' class='searchbox textfield'>";
+	echo "<input type='hidden' name='searchquery' id='searchquery_disabled' disabled='disabled'>";
 	echo "<input type='submit' class='button button_searchbox'><br>";
-	echo "<input type='radio' class='radiobutton' id='searchbytitle' name='searchtype' value='0' checked>";
+	echo "<input type='radio' class='radiobutton' id='searchbytitle' name='searchtype' onclick='search_options_toggle(\"lock_date\")' value='0' checked>";
 	echo "<label class='searchlabel' for='searchbytitle'>By title</label><br>";
-	echo "<input type='radio' class='radiobutton' id='searchbytags' name='searchtype' value='1'>";
-	echo "<label class='searchlabel' for='searchbytags'>By tags (separated by space)</label>";
+	echo "<input type='radio' class='radiobutton' id='searchbytags' name='searchtype' onclick='search_options_toggle(\"lock_date\")' value='1'>";
+	echo "<label class='searchlabel' for='searchbytags'>By tags (separated by space)</label><br>";
+	echo "<input type='radio' class='radiobutton' id='searchbydate' name='searchtype' onclick='search_options_toggle(\"lock_bar\")' value='2'>";
+	echo "<label class='searchlabel' for='searchbydate'>By date</label><br>";
+	echo "From <input type='date' class='dateinput textfield' name='search_fromdate' disabled='disabled'><br>";
+	echo "To <input type='date' class='dateinput textfield' name='search_todate' disabled='disabled'>";
 	echo "</form>";
 	echo "<form action='index.php' method='post'>";
 	echo "<input type='submit' class='button' value='Random post'>";
@@ -59,7 +64,7 @@
 	}
 	else
 	{
-		$authtext = "hidden";
+		$authtext = "hidden. Subscribe to Patreon, boost our Discord server or donate individually via PayPal to unlock exclusive content";
 	}
 	echo "<div class='authentication gadgets'>";
 	echo "<h3 class='gadgets_top_text'>Authentication</h3>";

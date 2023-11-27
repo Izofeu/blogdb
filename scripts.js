@@ -36,3 +36,28 @@ function confirm_analytics()
 					+ "links and posts via Google. It will not stop logging of your activity on the webserver. Do you want to continue?");
 	}
 }
+
+function search_options_toggle(what)
+{
+	let search_bar = document.getElementById("searchquery");
+	let hidden_search = document.getElementById("searchquery_disabled");
+	let search_dates = document.getElementsByClassName("dateinput");
+	if(what == "lock_bar")
+	{
+		search_bar.setAttribute("disabled", "disabled");
+		for(let obj of search_dates)
+		{
+			obj.removeAttribute("disabled");
+		}
+		hidden_search.removeAttribute("disabled");
+	}
+	else if(what == "lock_date")
+	{
+		search_bar.removeAttribute("disabled");
+		for(let obj of search_dates)
+		{
+			obj.setAttribute("disabled", "disabled");
+		}
+		hidden_search.setAttribute("disabled", "disabled");
+	}
+}
