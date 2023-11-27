@@ -1,4 +1,6 @@
 <?php
+	// returns 0 on success, 1 if user can only delete own posts,
+	// 2 if user cannot delete posts at all and 3 if post doesn't exist
 	if(!isadmin(4) && !isadmin(16))
 	{
 		$postdeletesuccess = 2;
@@ -20,7 +22,12 @@
 				return;
 			}
 		}
-		$postdeletesuccess = 3;
+		else
+		{
+			$postdeletesuccess = 3;
+			mysqli_close($db);
+			return;
+		}
 	}
 	$query = "DELETE FROM posts WHERE id = ?";
 	mysqli_execute_query($db, $query, [$_POST["postdelete_id"]]);

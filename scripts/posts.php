@@ -28,13 +28,23 @@ $postcount = 20;
 // Setting default variables, do NOT edit these
 // This variable is responsible for displaying No posts found notice.
 $nopost = true;
+// This variable should be toggled if user is in search mode.
 $issearch = false;
+// This variable should be toggled if user is browsing a single post.
+// Should also be set for text posts.
 $ispost = false;
+// This variable should be toggled if user is searching by valid tags.
 $searchbytags = false;
+// This variable should be toggled if user is searching by valid date.
 $searchbydate = false;
+// This variable should be toggled if user is browsing a text post.
 $textpost = false;
+// This variable should be toggled if user has negated the search.
+// It doesn't guarantee that the search is valid or even executed.
 $negatesearch = false;
+// This variable is used for fancy displaying of "too many tags in search" notice.
 $searchfailed = false;
+
 // Prepare default query to get posts
 $query = "SELECT * FROM posts WHERE ispaid = 0 ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
 // Default query if user is a paid user
@@ -79,7 +89,7 @@ else if(isset($_POST["random"]))
 	}
 }
 
-// Check if user is trying to perform a search action of any type
+// User doesn't want a random post, check if user is trying to perform a search action of any type
 else if(isset($_GET["searchquery"]))
 {
 	// Is the search negated?
@@ -107,15 +117,18 @@ else if(isset($_GET["searchquery"]))
 			{
 				$querytags[$i] = "%" . $querytags[$i] . "%";
 			}
-			// Kill the script if user tries to search too many tags
 			$continue = true;
 			if($querytagscount > 5)
 			{
+				// Disable search mode if user is trying to search too many tags at once.
+				// We don't want malicious users to potentially overload the database with too many
+				// AND queries.
 				$continue = false;
 				$issearch = false;
 				$searchfailed = true;
 				$searchbytags = false;
 			}
+			// Tags are validated, continue execution
 			if($continue)
 			{
 				// Default query
@@ -193,7 +206,7 @@ else if(isset($_GET["searchquery"]))
 				$regex = '/^\d{4}-\d{2}-\d{2}$/';
 				if(preg_match($regex, $_GET["search_fromdate"]) && preg_match($regex, $_GET["search_todate"]))
 				{
-					// Both dates are valid, continue
+					// Both dates are fully valid, continue
 					$continue = true;
 				}
 			}
@@ -287,6 +300,7 @@ else
 # 6 - imageurl
 # 7 - ispaid
 
+// Display a message if user inputted too many tags in search by tags mode
 if($searchfailed)
 {
 	echo "<div class='searchquerytext'>";
@@ -294,7 +308,7 @@ if($searchfailed)
 	echo "</div>";
 }
 
-// Print search query text
+// Print adequate search query text and mode as well as negation
 if($issearch)
 {
 	echo "<div class='searchquerytext'>";
@@ -623,7 +637,7 @@ else if(!$ispost)
 		}
 		if($searchbytags || $searchbydate)
 		{
-			// If user is in search by tags mode, we already have a mysqli object so we do not need to query the database
+			// If user is in search by tags or by date mode, we already have a mysqli object so we do not need to query the database
 			$res = $searchpostcount;
 		}
 		else
@@ -664,6 +678,7 @@ else if(!$ispost)
 			}
 			else
 			{
+				// Default search type if user is searching by title, required
 				echo "&searchtype=0";
 			}
 			if($negatesearch)
@@ -695,6 +710,7 @@ else if(!$ispost)
 			}
 			else
 			{
+				// Default search type if user is searching by title, required
 				echo "&searchtype=0";
 			}
 			if($negatesearch)
