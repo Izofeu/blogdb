@@ -44,6 +44,11 @@ $textpost = false;
 $negatesearch = false;
 // This variable is used for fancy displaying of "too many tags in search" notice.
 $searchfailed = false;
+// This variable is enabled if user is searching for paid posts only.
+// Paired with issearch which is either set to false if user only
+// wants paid posts, or with issearch on if user wants paid posts
+// that match the search criteria.
+$paidpostssearch = false;
 
 // Prepare default query to get posts
 $query = "SELECT * FROM posts WHERE ispaid = 0 ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
@@ -152,6 +157,11 @@ else if(isset($_GET["searchquery"]))
 					{
 						$query = $query . " LIKE ?";
 					}
+					// Does the user only want paid posts?
+					if(isset($_GET["paidpostsonly"]))
+					{
+						$query = $query . " AND ispaid = 1";
+					}
 				}
 				// Alternate query, this is used to get count of posts for Page x out of y
 				$querycount = "SELECT COUNT(id) FROM posts WHERE ispaid = 0 AND tags";
@@ -173,6 +183,11 @@ else if(isset($_GET["searchquery"]))
 					else
 					{
 						$querycount = $querycount . " LIKE ?";
+					}
+					if(isset($_GET["paidpostsonly"]))
+					{
+						$paidpostssearch = true;
+						$querycount = $querycount . " AND ispaid = 1";
 					}
 				}
 				// Depending on user argument count, add enough 'AND tags' clauses
@@ -233,13 +248,20 @@ else if(isset($_GET["searchquery"]))
 				}
 				if($isauth)
 				{
-					$query = "SELECT * FROM posts WHERE (date BETWEEN ? AND ?) ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+					$query = "SELECT * FROM posts WHERE (date BETWEEN ? AND ?)";
 					$querycount = "SELECT COUNT(id) FROM posts WHERE (date BETWEEN ? AND ?)";
 					if($negatesearch)
 					{
-						$query = "SELECT * FROM posts WHERE (date NOT BETWEEN ? AND ?) ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+						$query = "SELECT * FROM posts WHERE (date NOT BETWEEN ? AND ?)";
 						$querycount = "SELECT COUNT(id) FROM posts WHERE (date NOT BETWEEN ? AND ?)";
 					}
+					if(isset($_GET["paidpostsonly"]))
+					{
+						$paidpostssearch = true;
+						$query = $query . " AND ispaid = 1";
+						$querycount = $querycount . " AND ispaid = 1";
+					}
+					$query = $query . " ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
 				}
 				// Execute a query with count of found posts, sanitized
 				$searchpostcount = mysqli_execute_query($db, $querycount, $querydate);
@@ -260,13 +282,33 @@ else if(isset($_GET["searchquery"]))
 			}
 			if($isauth)
 			{
-				$query = "SELECT * FROM posts WHERE title LIKE ? ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+				$query = "SELECT * FROM posts WHERE title LIKE ?";
+				$querycount = "SELECT COUNT(id) FROM posts WHERE title LIKE ?";
 				if($negatesearch)
 				{
-					$query = "SELECT * FROM posts WHERE title NOT LIKE ? ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+					$query = "SELECT * FROM posts WHERE title NOT LIKE ?";
+					$querycount = "SELECT COUNT(id) FROM posts WHERE title NOT LIKE ?";
 				}
+				if(isset($_GET["paidpostsonly"]))
+				{
+					$paidpostssearch = true;
+					$query = $query . " AND ispaid = 1";
+					$querycount = $querycount . " AND ispaid = 1";
+					$searchpostcount = mysqli_execute_query($db, $querycount, [$_GET["searchquery"]]);
+				}
+				$query = $query . " ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
 			}
 		}
+	}
+	// Run this query if user wants paid posts
+	// without search parameters.
+	else if(isset($_GET["paidpostsonly"]) && $isauth)
+	{
+		$paidpostssearch = true;
+		// We do not set issearch flag.
+		$query = "SELECT * FROM posts WHERE ispaid = 1 ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+		$querycount = "SELECT COUNT(id) FROM posts WHERE ispaid = 1 ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+		$searchpostcount = mysqli_query($db, $querycount);
 	}
 }
 
@@ -286,6 +328,7 @@ else if($searchbydate && $issearch)
 	$res = mysqli_execute_query($db, $query, $querydate);
 }
 // Execute this query if user is not in search mode
+// or if user wants paid posts only.
 else
 {
 	$res = mysqli_query($db, $query);
@@ -309,10 +352,16 @@ if($searchfailed)
 }
 
 // Print adequate search query text and mode as well as negation
-if($issearch)
+if($issearch || $paidpostssearch)
 {
 	echo "<div class='searchquerytext'>";
-	if($searchbydate)
+	if($paidpostssearch && !$issearch)
+	{
+		echo "Displaying paid posts only.";
+		// Nice display of two different messages.
+		$paidnoticedisplayed = true;
+	}
+	else if($searchbydate)
 	{
 		echo "Searching: dates ";
 		if($negatesearch)
@@ -320,7 +369,6 @@ if($issearch)
 			echo "not ";
 		}
 		echo "between " . htmlspecialchars($_GET["search_fromdate"]) . " and " . htmlspecialchars($_GET["search_todate"]) . ".";
-		echo "</div>";
 	}
 	else
 	{
@@ -341,8 +389,12 @@ if($issearch)
 			echo "title";
 		}
 		echo ".";
-		echo "</div>";
 	}
+	if($paidpostssearch && !isset($paidnoticedisplayed))
+	{
+		echo " Paid posts only mode.";
+	}
+	echo "</div>";
 }
 
 // If user tried to edit / delete / insert a post, include a notice script to print appropriate message
@@ -634,6 +686,10 @@ else if(!$ispost)
 			{
 				$query = "SELECT COUNT(id) FROM posts WHERE title NOT LIKE ?";
 			}
+			if($paidpostssearch)
+			{
+				$query = $query . " AND ispaid = 1";
+			}
 		}
 		if($searchbytags || $searchbydate)
 		{
@@ -645,6 +701,13 @@ else if(!$ispost)
 			// Executing query in search by title mode
 			$res = mysqli_execute_query($db, $query, ["%" . $_GET["searchquery"] . "%"]);
 		}
+	}
+	// If user is not in search mode but wants paid posts only,
+	// get the prepared mysqli object as it's easier
+	// than writing a bunch of queries here.
+	else if($paidpostssearch)
+	{
+		$res = $searchpostcount;
 	}
 	else
 	{
@@ -685,6 +748,16 @@ else if(!$ispost)
 			{
 				echo "&negatesearch=on";
 			}
+			if($paidpostssearch)
+			{
+				echo "&paidpostsonly=on";
+			}
+		}
+		// Needs to be outside the if above in case user wants only paid posts
+		// but didn't input any search parameters.
+		else if($paidpostssearch)
+		{
+			echo "&searchquery=&searchtype=0&paidpostsonly=on";
 		}
 		echo "'><< </a>";
 	}
@@ -717,6 +790,14 @@ else if(!$ispost)
 			{
 				echo "&negatesearch=on";
 			}
+			if($paidpostssearch)
+			{
+				echo "&paidpostsonly=on";
+			}
+		}
+		else if($paidpostssearch)
+		{
+			echo "&searchquery=&searchtype=0&paidpostsonly=on";
 		}
 		echo "'> >></a>";
 	}

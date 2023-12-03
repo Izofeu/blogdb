@@ -44,6 +44,13 @@
 	echo "<label class='searchlabel' for='searchbytags'>By tags (separated by space)</label><br>";
 	echo "<input type='radio' class='radiobutton' id='searchbydate' name='searchtype' onclick='search_options_toggle(\"lock_bar\")' value='2'>";
 	echo "<label class='searchlabel' for='searchbydate'>By date</label><br>";
+	echo "<input type='checkbox' class='radiobutton' id='paidpostsonly' name='paidpostsonly'";
+	if(!$isauth)
+	{
+		echo " disabled='disabled'";
+	}
+	echo ">";
+	echo "<label class='searchlabel' for='paidpostsonly'>Paid only</label><br>";
 	echo "<input type='checkbox' class='radiobutton' id='negatesearch' name='negatesearch'>";
 	echo "<label class='searchlabel' for='negatesearch'>Not</label><br>";
 	echo "From <input type='date' class='dateinput textfield' name='search_fromdate' disabled='disabled'><br>";
