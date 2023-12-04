@@ -307,7 +307,7 @@ else if(isset($_GET["searchquery"]))
 		$paidpostssearch = true;
 		// We do not set issearch flag.
 		$query = "SELECT * FROM posts WHERE ispaid = 1 ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
-		$querycount = "SELECT COUNT(id) FROM posts WHERE ispaid = 1 ORDER BY date DESC LIMIT " . $postcount . " OFFSET " . $offset;
+		$querycount = "SELECT COUNT(id) FROM posts WHERE ispaid = 1";
 		$searchpostcount = mysqli_query($db, $querycount);
 	}
 }
