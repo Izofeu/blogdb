@@ -204,11 +204,11 @@
 	echo "<div class='filter_by gadgets'>";
 	echo "<h3 class='gadgets_top_text'>Filter by</h3>";
 	echo "<ul class='url_list'>
-		<li><a class='mikulink' href='./index.php?searchquery=miku&searchtype=1'>Miku</a></li>
-		<li><a class='lukalink' href='./index.php?searchquery=luka&searchtype=1'>Luka</a></li>
-		<li><a class='rinlink' href='./index.php?searchquery=rin&searchtype=1'>Rin</a></li>
-		<li><a class='hakulink' href='./index.php?searchquery=haku&searchtype=1'>Haku</a></li>
-		<li><a class='meikolink' href='./index.php?searchquery=meiko&searchtype=1'>Meiko</a></li>
+		<li><a class='mikulink' href='./index.php?searchmode=on&searchquery_tags=miku'>Miku</a></li>
+		<li><a class='lukalink' href='./index.php?searchmode=on&searchquery_tags=luka'>Luka</a></li>
+		<li><a class='rinlink' href='./index.php?searchmode=on&searchquery_tags=rin'>Rin</a></li>
+		<li><a class='hakulink' href='./index.php?searchmode=on&searchquery_tags=haku'>Haku</a></li>
+		<li><a class='meikolink' href='./index.php?searchmode=on&searchquery_tags=meiko'>Meiko</a></li>
 		</ul>";
 	echo "</div>";
 	
