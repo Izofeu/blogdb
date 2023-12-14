@@ -37,27 +37,36 @@ function confirm_analytics()
 	}
 }
 
-function search_options_toggle(what)
+function datelock_toggle()
 {
-	let search_bar = document.getElementById("searchquery");
-	let hidden_search = document.getElementById("searchquery_disabled");
 	let search_dates = document.getElementsByClassName("dateinput");
-	if(what == "lock_bar")
+	if(search_dates[0].getAttribute("disabled"))
 	{
-		search_bar.setAttribute("disabled", "disabled");
 		for(let obj of search_dates)
 		{
 			obj.removeAttribute("disabled");
 		}
-		hidden_search.removeAttribute("disabled");
 	}
-	else if(what == "lock_date")
+	else
 	{
-		search_bar.removeAttribute("disabled");
 		for(let obj of search_dates)
 		{
 			obj.setAttribute("disabled", "disabled");
 		}
-		hidden_search.setAttribute("disabled", "disabled");
+	}
+}
+
+function search_reset()
+{
+	let searchmodules = document.getElementsByClassName("searchmodule");
+	for(let obj of searchmodules)
+	{
+		obj.value = "";
+		obj.checked = false;
+	}
+	let search_dates = document.getElementsByClassName("dateinput");
+	for(let obj of search_dates)
+	{
+		obj.setAttribute("disabled", "disabled");
 	}
 }

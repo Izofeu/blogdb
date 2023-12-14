@@ -35,27 +35,82 @@
 	echo "<div class='searchbar gadgets'>";
 	echo "<h3 class='gadgets_top_text'>Search for...</h3>";
 	echo "<form action='index.php' method='get'>";
-	echo "<input type='text' id='searchquery' name='searchquery' class='searchbox textfield'>";
-	echo "<input type='hidden' name='searchquery' id='searchquery_disabled' disabled='disabled'>";
-	echo "<input type='submit' class='button button_searchbox'><br>";
-	echo "<input type='radio' class='radiobutton' id='searchbytitle' name='searchtype' onclick='search_options_toggle(\"lock_date\")' value='0' checked>";
-	echo "<label class='searchlabel' for='searchbytitle'>By title</label><br>";
-	echo "<input type='radio' class='radiobutton' id='searchbytags' name='searchtype' onclick='search_options_toggle(\"lock_date\")' value='1'>";
-	echo "<label class='searchlabel' for='searchbytags'>By tags (separated by space)</label><br>";
-	echo "<input type='radio' class='radiobutton' id='searchbydate' name='searchtype' onclick='search_options_toggle(\"lock_bar\")' value='2'>";
-	echo "<label class='searchlabel' for='searchbydate'>By date</label><br>";
-	echo "<input type='checkbox' class='radiobutton' id='paidpostsonly' name='paidpostsonly'";
+	echo "By title: ";
+	echo "<input type='hidden' name='searchmode' value='on'>";
+	echo "<input type='checkbox' name='searchquery_title_not' class='radiobutton searchmodule' id='searchquery_title_not'";
+	if(isset($_GET["searchquery_title_not"]))
+	{
+		echo " checked";
+	}
+	echo ">Exclude";
+	echo "<input type='text' name='searchquery_title' class='searchbox textfield searchmodule'";
+	if($searchtype & 1)
+	{
+		echo " value='" . htmlspecialchars($_GET["searchquery_title"]) . "'";
+	}
+	echo "><br>";
+	echo "By tags (separated by space): ";
+	echo "<input type='checkbox' name='searchquery_tags_not' class='radiobutton searchmodule' id='searchquery_tags_not'";
+	if(isset($_GET["searchquery_tags_not"]))
+	{
+		echo " checked";
+	}
+	echo ">Exclude";
+	echo "<input type='text' name='searchquery_tags' class='searchbox textfield searchmodule'";
+	if($searchtype & 2)
+	{
+		echo " value='" . htmlspecialchars($_GET["searchquery_tags"]) . "'";
+	}
+	echo "><br>";
+	echo "<input type='checkbox' class='radiobutton searchmodule' id='searchbydate' name='searchquery_date_enabled' onclick=\"datelock_toggle()\"";
+	if($searchtype & 4)
+	{
+		echo " checked";
+	}
+	echo ">By date: ";
+	echo "<input type='checkbox' name='searchquery_date_not' class='radiobutton searchmodule' id='searchquery_date_not'";
+	if(isset($_GET["searchquery_date_not"]))
+	{
+		echo " checked";
+	}
+	echo ">Exclude<br>";
+	echo "From <input type='date' class='dateinput textfield searchmodule' name='searchquery_fromdate'";
+	if($searchtype & 4)
+	{
+		echo " value='" . htmlspecialchars($_GET["searchquery_fromdate"]) . "'";
+	}
+	else
+	{
+		echo "disabled='disabled'";
+	}
+	echo "><br>";
+	echo "To <input type='date' class='dateinput textfield searchmodule' name='searchquery_todate'";
+	if($searchtype & 4)
+	{
+		echo " value='" . htmlspecialchars($_GET["searchquery_fromdate"]) . "'";
+	}
+	else
+	{
+		echo "disabled='disabled'";
+	}
+	echo "><br>";
+	echo "<input type='checkbox' class='radiobutton searchmodule' id='paidpostsonly' name='paidpostsonly'";
 	if(!$isauth)
 	{
 		echo " disabled='disabled'";
 	}
+	else if($paidpostssearch)
+	{
+		echo " checked";
+	}
 	echo ">";
 	echo "<label class='searchlabel' for='paidpostsonly'>Paid only</label><br>";
-	echo "<input type='checkbox' class='radiobutton' id='negatesearch' name='negatesearch'>";
-	echo "<label class='searchlabel' for='negatesearch'>Not</label><br>";
-	echo "From <input type='date' class='dateinput textfield' name='search_fromdate' disabled='disabled'><br>";
-	echo "To <input type='date' class='dateinput textfield' name='search_todate' disabled='disabled'>";
+	echo "<div class='leftright'>";
+	echo "<input type='submit' class='button button_searchbox align_topleft'>";
+	echo "<button type='button' class='button align_topright' onclick='search_reset()'>Reset form</button>";
+	echo "</div>";
 	echo "</form>";
+	
 	echo "<form action='index.php' method='post'>";
 	echo "<input type='submit' class='button' value='Random post'>";
 	echo "<input type='hidden' name='random'>";

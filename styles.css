@@ -179,7 +179,7 @@ h3
 
 .searchbox
 {
-	width: 225px;
+	width: 285px;
 	margin-bottom: 5px;
 }
 
@@ -407,10 +407,33 @@ textarea
 	font-weight: bold;
 }
 
+.bold
+{
+	font-weight: bold;
+}
+
 .checkbox
 {
 	width: 20px;
 	height: 20px;
+}
+
+.leftright
+{
+	position: relative;
+	height: 21px;
+}
+
+.align_topleft
+{
+	position: absolute;
+	left: 0;
+}
+
+.align_topright
+{
+	position: absolute;
+	right: 0;
 }
 
 @media only screen and (min-width: 1817px)
