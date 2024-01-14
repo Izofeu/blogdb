@@ -215,7 +215,11 @@ if($issearch)
 else
 {
 	$res = mysqli_query($db, $query);
-	$res_count = mysqli_query($db, "SELECT COUNT(id) FROM posts");
+	$res_count = mysqli_query($db, "SELECT COUNT(id) FROM posts WHERE ispaid = 0");
+	if($isauth)
+	{
+		$res_count = mysqli_query($db, "SELECT COUNT(id) FROM posts");
+	}
 }
 // Structure of the database's table
 # 0 - id
