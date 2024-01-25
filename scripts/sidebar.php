@@ -251,4 +251,7 @@
 		echo "</form>";
 	}
 	echo "</div>";
+	
+	# H.265 check
+	require("scripts/h265check.php");
 ?>
