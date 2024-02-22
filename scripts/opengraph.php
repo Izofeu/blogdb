@@ -42,12 +42,12 @@ if($ispost && !$textpost)
 		{
 			echo "[PAID] ";
 		}
-		echo $res[1] . "'>";
-		echo "<meta property='og:image' content='" . $res[6] . "'>";
+		echo htmlspecialchars($res[1]) . "'>";
+		echo "<meta property='og:image' content='" . htmlspecialchars($res[6]) . "'>";
 		echo "<meta property='og:url' content='https://" . $domain . "/index.php?id=" . $res[0] . "'>";
-		echo "<meta property='og:description' content='A frontend for watching Nutsuki&#39;s videos. This video has the following tags: " . $res[2] . ".'>";
-		echo "<meta property='description' content='A frontend for watching Nutsuki&#39;s videos. This video has the following tags: " . $res[2] . ".'>";
-		echo "<title>" . $res[1] . " (" . $res[0] . ") - " . $pagename . "</title>";
+		echo "<meta property='og:description' content='A frontend for watching Nutsuki&#39;s videos. This video has the following tags: " . htmlspecialchars($res[2]) . ".'>";
+		echo "<meta property='description' content='A frontend for watching Nutsuki&#39;s videos. This video has the following tags: " . htmlspecialchars($res[2]) . ".'>";
+		echo "<title>" . htmlspecialchars($res[1]) . " (" . $res[0] . ") - " . htmlspecialchars($pagename) . "</title>";
 	}
 }
 else if($textpost)
@@ -56,11 +56,11 @@ else if($textpost)
 	$res = mysqli_fetch_array($res);
 	if($res)
 	{
-		echo "<meta property='og:title' content='" . $res[2] . "'>";
+		echo "<meta property='og:title' content='" . htmlspecialchars($res[2]) . "'>";
 		echo "<meta property='og:url' content='https://" . $domain . "/index.php?textpost&id=" . $res[0] . "'>";
 		echo "<meta property='og:description' content='A frontend for watching Nutsuki&#39;s videos.'>";
 		echo "<meta property='description' content='A frontend for watching Nutsuki&#39;s videos.'>";
-		echo "<title>" . $res[2] . " - " . $pagename . "</title>";
+		echo "<title>" . htmlspecialchars($res[2]) . " - " . htmlspecialchars($pagename) . "</title>";
 	}
 }
 else
@@ -69,7 +69,7 @@ else
 	echo "<meta property='og:url' content='https://" . $domain . "'>";
 	echo "<meta property='og:description' content='A frontend for watching Nutsuki&#39;s videos.'>";
 	echo "<meta property='description' content='A frontend for watching Nutsuki&#39;s videos.'>";
-	echo "<title>" . $pagename . "</title>";
+	echo "<title>" . htmlspecialchars($pagename) . "</title>";
 }
 
 mysqli_close($db)
